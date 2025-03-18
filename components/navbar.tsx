@@ -17,7 +17,7 @@ export function Navbar({ siteName }: NavbarProps) {
           <a href="/about">Acerca</a>
         </li>
         <li>
-          <a href="/contact">Contacto</a>
+          <a href="/contact">Contacto...</a>
         </li>
       </ul>
     </nav>
