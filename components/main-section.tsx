@@ -32,19 +32,19 @@ export function MainSection({ data }: { readonly data: MainSectionProps }) {
   const linkItem = Array.isArray(link) ? link[0] : null;
 
   return (
-    <header className="relative h-[600px] overflow-hidden">
+    <header className="relative w-full h-[600px] overflow-hidden">
       <img
         alt={image.alternativeText ?? "no alternative text"}
-        className="absolute inset-0 object-cover w-full h-full"
+        className="absolute inset-0 w-full h-full object-contain"
         height={1080}
         src={imageURL}
         style={{
           aspectRatio: "1920/1080",
-          objectFit: "cover",
+          objectFit: "contain",
         }}
         width={1920}
       />
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white">
+      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white">
         <h1 className="text-4xl font-bold md:text-5xl lg:text-6xl">
           {heading}
         </h1>
