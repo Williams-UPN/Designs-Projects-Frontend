@@ -1,4 +1,3 @@
-// @/lib/get-home-data.ts
 import qs from "qs";
 
 const homePageQuery = qs.stringify(
@@ -11,12 +10,12 @@ const homePageQuery = qs.stringify(
           "layaout.main-section": {
             populate: {
               image: {
-                // Solo pedimos url y alternativeText
+                // Solicitamos solo url y alternativeText
                 fields: ["url", "alternativeText"],
               },
               link: {
-                // Como "link" es un componente repetible, 
-                // en lugar de 'populate=true' también podemos pedir fields específicos
+                // Como "link" es un componente repetible,
+                // pedimos los campos específicos
                 fields: ["url", "text", "isExternal"],
               },
             },
@@ -29,18 +28,19 @@ const homePageQuery = qs.stringify(
 );
 
 async function fetchStrapi(path: string) {
-  // URL base de Strapi (ajusta si tu .env difiere)
+  // URL base de Strapi (usando la variable de entorno; asegúrate de tenerla definida en .env)
   const baseUrl = process.env.STRAPI_HOST || "http://localhost:1337";
-  // Token de Strapi (necesario si tu API requiere auth)
+  // Token de Strapi (usado en el servidor, no expuesto al cliente)
   const token = process.env.STRAPI_TOKEN || "";
 
   const url = new URL(path, baseUrl);
-  // Añadimos la query string generada por qs
+  // Agregamos la query string generada por qs
   url.search = homePageQuery;
 
   const res = await fetch(url.toString(), {
     headers: {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
   });
   if (!res.ok) {
@@ -51,11 +51,26 @@ async function fetchStrapi(path: string) {
 
 /**
  * getHomeData
- * Consulta a /api/home y trae:
+ * Consulta a /api/home y devuelve un objeto transformado con:
  *  - title, description
  *  - blocks -> layaout.main-section (Heading, subHeading, image, link)
  */
 export async function getHomeData() {
-  const data = await fetchStrapi("/api/home"); // Ajusta si tu endpoint es distinto
-  return data; // Devuelve todo el JSON
+  const res = await fetchStrapi("/api/home"); // Ajusta si tu endpoint es distinto
+
+  console.dir(res, { depth: null });
+
+
+  if (!res?.data) {
+    throw new Error("Failed to fetch home data: API response invalid");
+  }
+  
+  // Extraemos los atributos de la respuesta, similar a getGlobal
+  const attributes = res.data;
+  
+  return {
+    title: attributes.title || "",
+    description: attributes.description || "",
+    blocks: attributes.blocks || []
+  };
 }
