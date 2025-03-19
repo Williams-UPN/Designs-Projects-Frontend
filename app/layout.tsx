@@ -27,14 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
         ? `${process.env.STRAPI_HOST}${globalData.defaultSeo.shareImage.url}`
         : "/og-image.jpg",
     },
-    twitter: {
-      card: "summary_large_image",
-      title: globalData.defaultSeo.metaTitle,
-      description: globalData.defaultSeo.metaDescription,
-      images: globalData.defaultSeo.shareImage?.url
-        ? `${process.env.STRAPI_HOST}${globalData.defaultSeo.shareImage.url}`
-        : "/twitter-image.jpg",
-    },
+    // Se ha eliminado la sección de Twitter
   };
 }
 

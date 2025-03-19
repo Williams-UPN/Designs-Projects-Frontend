@@ -4,7 +4,7 @@ import { query } from "./strapi";
 export type SocialLinks = {
   facebookUrl: string;
   instagramUrl: string;
-  twitterUrl: string;
+  // Se elimina twitterUrl
   tiktokUrl: string;
   youtubeUrl: string;
   whatsappUrl: string;
@@ -18,9 +18,7 @@ export type DefaultSeo = {
   metaTitle: string;
   metaDescription: string;
   shareImage?: SeoImage;
-  twitterTitle: string;
-  twitterDescription: string;
-  twitterImage?: SeoImage;
+  // Se eliminan twitterTitle, twitterDescription y twitterImage
 };
 
 export type GlobalData = {
@@ -33,7 +31,7 @@ export type GlobalData = {
 
 export async function getGlobal(): Promise<GlobalData> {
   const res = await query(
-    "global?populate[defaultSeo][populate][]=shareImage&populate[defaultSeo][populate][]=twitterImage&populate[socialLinks]=*"
+    "global?populate[defaultSeo][populate][]=shareImage&populate[socialLinks]=*"
   );
 
   if (!res?.data) {
@@ -63,7 +61,7 @@ export async function getGlobal(): Promise<GlobalData> {
 
   const favicon = getImageUrl(attributes.favicon);
   const shareImage = getImageUrl(attributes.defaultSeo.shareImage);
-  const twitterImage = getImageUrl(attributes.defaultSeo.twitterImage);
+  // Se elimina twitterImage
 
   return {
     siteName: attributes.siteName || '',
@@ -73,14 +71,11 @@ export async function getGlobal(): Promise<GlobalData> {
       metaTitle: attributes.defaultSeo.metaTitle || '',
       metaDescription: attributes.defaultSeo.metaDescription || '',
       shareImage,
-      twitterTitle: attributes.defaultSeo.twitterTitle || '',
-      twitterDescription: attributes.defaultSeo.twitterDescription || '',
-      twitterImage,
     },
     socialLinks: {
       facebookUrl: attributes.socialLinks.facebookUrl || '',
       instagramUrl: attributes.socialLinks.instagramUrl || '',
-      twitterUrl: attributes.socialLinks.twitterUrl || '',
+      // Se elimina twitterUrl
       tiktokUrl: attributes.socialLinks.tiktokUrl || '',
       youtubeUrl: attributes.socialLinks.youtubeUrl || '',
       whatsappUrl: attributes.socialLinks.whatsappUrl || '',
