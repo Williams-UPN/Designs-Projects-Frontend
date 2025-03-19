@@ -1,6 +1,12 @@
 import fetch from 'node-fetch';
 
 const { STRAPI_HOST, STRAPI_TOKEN } = process.env;
+if (!STRAPI_HOST || !STRAPI_TOKEN) {
+  throw new Error('Faltan variables de entorno: STRAPI_HOST o STRAPI_TOKEN');
+}
+
+const host: string = STRAPI_HOST;
+const token: string = STRAPI_TOKEN;
 
 // Define la interfaz para la respuesta de Strapi
 interface StrapiResponse<T> {
@@ -9,9 +15,13 @@ interface StrapiResponse<T> {
 }
 
 export async function query(url: string): Promise<StrapiResponse<any>> {
-  const response = await fetch(`${STRAPI_HOST}/api/${url}`, {
+  const fullUrl = `${host.replace(/\/$/, '')}/api/${url}`;
+  console.log("Consultando URL:", fullUrl);
+
+  const response = await fetch(fullUrl, {
     headers: {
-      Authorization: `Bearer ${STRAPI_TOKEN}`
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
     }
   });
   
@@ -21,7 +31,6 @@ export async function query(url: string): Promise<StrapiResponse<any>> {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
   
-  // Aserción de tipo para que TypeScript reconozca la estructura
   const data = (await response.json()) as StrapiResponse<any>;
   console.log("Respuesta de la API:", data);
   return data;
