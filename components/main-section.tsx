@@ -1,70 +1,65 @@
-// @/components/custom/main-section.tsx
-import React from "react";
+import Link from "next/link";
 
-interface MainSectionImage {
+interface Image {
   id: number;
+  documentId: string;
   url: string;
-  alternativeText?: string | null;
+  alternativeText: string | null;
 }
 
-interface MainSectionLink {
+interface LinkItem {
   id: number;
   url: string;
   text: string;
-  isExternal: boolean;
-}
-
-export interface MainSectionBlock {
-  id: number;
-  __component: string; // "layaout.main-section"
-  Heading: string;
-  subHeading: string;
-  image: MainSectionImage;
-  link: MainSectionLink[];
 }
 
 interface MainSectionProps {
-  data: MainSectionBlock;
+  id: number;
+  documentId: string;
+  __component: string;
+  heading: string;
+  subHeading: string;
+  image: Image;
+  link: LinkItem[]; // Ahora es un array
 }
 
-export function MainSection({ data }: MainSectionProps) {
-  const baseUrl = process.env.STRAPI_HOST || "http://localhost:1337";
-  // Arma la URL absoluta para la imagen
-  const imageUrl = data.image ? `${baseUrl}${data.image.url}` : "/placeholder.jpg";
+export function MainSection({ data }: { readonly data: MainSectionProps }) {
+  console.dir(data, { depth: null });
+  const { heading, subHeading, image, link } = data;
+  const imageURL = "http://localhost:1337" + image.url;
+
+  // Extraemos el primer elemento del array
+  const linkItem = Array.isArray(link) ? link[0] : null;
 
   return (
-    <section className="relative bg-[#0f172a] text-white py-12 px-4">
-      {/* Imagen de fondo */}
-      <div className="absolute inset-0">
-        <img
-          src={imageUrl}
-          alt={data.image.alternativeText || "No alt text"}
-          className="w-full h-full object-cover"
-        />
-        {/* Semitransparencia */}
-        <div className="absolute inset-0 bg-black bg-opacity-40" />
-      </div>
-
-      {/* Contenido */}
-      <div className="relative z-10 container mx-auto">
-        <h1 className="text-4xl font-extrabold mb-4">{data.Heading}</h1>
-        <p className="text-gray-300 text-lg mb-6">{data.subHeading}</p>
-
-        {/* Mapeamos el array link */}
-        {data.link?.map((l) => (
-          <a
-            key={l.id}
-            href={l.url}
-            className="inline-flex items-center px-5 py-3 text-base font-medium text-white bg-primary-700 
-                       rounded-md hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 
-                       dark:focus:ring-primary-900 transition-colors mr-4"
-            target={l.isExternal ? "_blank" : "_self"}
-            rel={l.isExternal ? "noopener noreferrer" : ""}
+    <header className="relative h-[600px] overflow-hidden">
+      <img
+        alt={image.alternativeText ?? "no alternative text"}
+        className="absolute inset-0 object-cover w-full h-full"
+        height={1080}
+        src={imageURL}
+        style={{
+          aspectRatio: "1920/1080",
+          objectFit: "cover",
+        }}
+        width={1920}
+      />
+      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white">
+        <h1 className="text-4xl font-bold md:text-5xl lg:text-6xl">
+          {heading}
+        </h1>
+        <p className="mt-4 text-lg md:text-xl lg:text-2xl">
+          {subHeading}
+        </p>
+        {linkItem && linkItem.url && (
+          <Link
+            className="mt-8 inline-flex items-center justify-center px-6 py-3 text-base font-medium text-black bg-white rounded-md shadow hover:bg-gray-100"
+            href={linkItem.url}
           >
-            {l.text}
-          </a>
-        ))}
+            {linkItem.text}
+          </Link>
+        )}
       </div>
-    </section>
+    </header>
   );
 }
