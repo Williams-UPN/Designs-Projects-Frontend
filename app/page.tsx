@@ -1,11 +1,11 @@
-import Image from "next/image";
-import styles from "./page.module.css";
-import { Button } from "@/components/ui/button"
- 
-export default function Home() {
+import { getHome } from "@/lib/get-home";
+
+export default async function Home() {
+  const { title, description } = await getHome();
   return (
-    <main className="container mx-auto py-6">
-      <Button>Click me</Button>
+    <main>
+      <h1>{title}</h1>
+      <p>{description}</p>
     </main>
-  )
+  );
 }
