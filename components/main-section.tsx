@@ -1,4 +1,5 @@
 import Link from "next/link";
+import {StrapiImage} from "@/components/strapiImage"
 
 interface Image {
   id: number;
@@ -24,24 +25,21 @@ interface MainSectionProps {
 }
 
 export function MainSection({ data }: { readonly data: MainSectionProps }) {
+
   console.dir(data, { depth: null });
+
   const { heading, subHeading, image, link } = data;
-  const imageURL = "http://localhost:1337" + image.url;
 
   // Extraemos el primer elemento del array
   const linkItem = Array.isArray(link) ? link[0] : null;
 
   return (
     <header className="relative w-full h-[600px] overflow-hidden">
-      <img
+      <StrapiImage
         alt={image.alternativeText ?? "no alternative text"}
         className="absolute inset-0 w-full h-full object-contain"
         height={1080}
-        src={imageURL}
-        style={{
-          aspectRatio: "1920/1080",
-          objectFit: "contain",
-        }}
+        src={image.url}
         width={1920}
       />
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white">
