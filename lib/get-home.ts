@@ -1,8 +1,8 @@
 import qs from "qs";
-import { flattenAttributes } from "@/lib/utils"; // Importamos la función desde la librería utils
+import { flattenAttributes } from "@/lib/utils"; 
 import { getStrapiURL } from "@/lib/utils";
 
-// Construimos la query para poblar los datos necesarios
+
 const homePageQuery = qs.stringify(
   {
     populate: {
@@ -32,11 +32,11 @@ const homePageQuery = qs.stringify(
   { encodeValuesOnly: true }
 );
 
-// Función para hacer fetch a Strapi
-async function fetchStrapi(path: string) {
-  const { baseUrl, token } = getStrapiURL(); // Obtiene URL y token
+async function fetchStrapi(path: string, queryString?: string) {
+  const { baseUrl, token } = getStrapiURL();
   const url = new URL(path, baseUrl);
-  url.search = homePageQuery;
+  // Si se pasó una queryString, úsala; de lo contrario, usa homePageQuery
+  url.search = queryString ?? homePageQuery;
 
   try {
     const res = await fetch(url.toString(), {
@@ -55,18 +55,33 @@ async function fetchStrapi(path: string) {
   }
 }
 
-/**
- * getHomeData
- * Consulta a "/api/home" y extrae el array de bloques, aplanando sus atributos.
- */
+
 export async function getHomeData() {
-  // Ajusta el endpoint según lo definido en Strapi ("/api/home" o "/api/home-page")
   const data = await fetchStrapi("/api/home");
   console.dir(data, { depth: null });
 
-  // Extraemos los bloques del objeto de respuesta y aplicamos flattenAttributes
   const { blocks = [] } = data.data || {};
   const flattenedBlocks = blocks.map((block: any) => flattenAttributes(block));
 
   return { blocks: flattenedBlocks };
+}
+
+//-------------------------------------------------------------
+
+export async function getGlobal(){
+  const { baseUrl } = getStrapiURL();
+  // Construimos la URL con /api/global
+  const url = new URL("/api/global", baseUrl);
+  
+  // Usamos array para el populate:
+  const globalQuery = qs.stringify({
+    populate: [
+      "header.logoText",
+      "header.ctaButton",
+      "footer.logoText",
+      "footer.socialLink"
+    ]
+  }, { encodeValuesOnly: true });
+  
+  return await fetchStrapi("/api/global", globalQuery);
 }
