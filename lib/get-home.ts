@@ -1,7 +1,9 @@
 import qs from "qs";
-import { flattenAttributes } from "@/lib/utils"; 
+import { flattenAttributes } from "@/lib/utils";
 import { getStrapiURL } from "@/lib/utils";
+import { unstable_noStore as noStore } from 'next/cache'
 
+// noStore(); llamar en todas las funciones
 
 const homePageQuery = qs.stringify(
   {
@@ -57,6 +59,7 @@ async function fetchStrapi(path: string, queryString?: string) {
 
 
 export async function getHomeData() {
+  noStore();
   const data = await fetchStrapi("/api/home");
   console.dir(data, { depth: null });
 
@@ -68,12 +71,8 @@ export async function getHomeData() {
 
 //-------------------------------------------------------------
 
-export async function getGlobal(){
-  const { baseUrl } = getStrapiURL();
-  // Construimos la URL con /api/global
-  const url = new URL("/api/global", baseUrl);
-  
-  // Usamos array para el populate:
+export async function getGlobal() {
+  noStore();
   const globalQuery = qs.stringify({
     populate: [
       "header.logoText",
@@ -82,6 +81,19 @@ export async function getGlobal(){
       "footer.socialLink"
     ]
   }, { encodeValuesOnly: true });
-  
+
   return await fetchStrapi("/api/global", globalQuery);
+}
+
+export async function getGlobalMetadata() {
+  noStore();
+  const metadataQuery = qs.stringify(
+    {
+      fields: ["title", "description"],
+    },
+    { encodeValuesOnly: true }
+  );
+
+  // Llamamos a fetchStrapi con la ruta y la query
+  return await fetchStrapi("/api/global", metadataQuery);
 }
