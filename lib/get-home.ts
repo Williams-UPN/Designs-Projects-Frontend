@@ -1,10 +1,9 @@
 import qs from "qs";
 import { flattenAttributes } from "@/lib/utils";
 import { getStrapiURL } from "@/lib/utils";
-import { unstable_noStore as noStore } from 'next/cache'
+import { unstable_noStore as noStore } from "next/cache";
 
-// noStore(); llamar en todas las funciones
-
+// Este query se usa si no se recibe otro query en fetchStrapi:
 const homePageQuery = qs.stringify(
   {
     populate: {
@@ -37,6 +36,7 @@ const homePageQuery = qs.stringify(
 async function fetchStrapi(path: string, queryString?: string) {
   const { baseUrl, token } = getStrapiURL();
   const url = new URL(path, baseUrl);
+
   // Si se pasó una queryString, úsala; de lo contrario, usa homePageQuery
   url.search = queryString ?? homePageQuery;
 
@@ -57,7 +57,8 @@ async function fetchStrapi(path: string, queryString?: string) {
   }
 }
 
-
+// -------------------------------------------------------------------------
+// Obtiene los datos de la página "home"
 export async function getHomeData() {
   noStore();
   const data = await fetchStrapi("/api/home");
@@ -69,22 +70,42 @@ export async function getHomeData() {
   return { blocks: flattenedBlocks };
 }
 
-//-------------------------------------------------------------
-
+// -------------------------------------------------------------------------
+// Obtiene los datos globales (header, footer)
 export async function getGlobal() {
   noStore();
-  const globalQuery = qs.stringify({
-    populate: [
-      "header.logoText",
-      "header.ctaButton",
-      "footer.logoText",
-      "footer.socialLink"
-    ]
-  }, { encodeValuesOnly: true });
+
+  const globalQuery = qs.stringify(
+    {
+      populate: {
+        // Imagen a nivel raíz
+        imageIco: {
+          fields: ["url", "alternativeText"],
+        },
+        // Luego populamos el header
+        header: {
+          populate: {
+            logoText: true,
+            ctaButton: true,
+          },
+        },
+        // Y el footer
+        footer: {
+          populate: {
+            logoText: true,
+            socialLink: true,
+          },
+        },
+      },
+    },
+    { encodeValuesOnly: true }
+  );
 
   return await fetchStrapi("/api/global", globalQuery);
 }
 
+// -------------------------------------------------------------------------
+// Obtiene sólo metadatos (title, description)
 export async function getGlobalMetadata() {
   noStore();
   const metadataQuery = qs.stringify(
@@ -94,6 +115,5 @@ export async function getGlobalMetadata() {
     { encodeValuesOnly: true }
   );
 
-  // Llamamos a fetchStrapi con la ruta y la query
   return await fetchStrapi("/api/global", metadataQuery);
 }
