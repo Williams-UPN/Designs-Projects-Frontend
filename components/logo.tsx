@@ -24,8 +24,8 @@ export function Logo({
         <StrapiImage
           src={image.url}
           alt={image.alternativeText ?? "no alt text"}
-          height={40}
-          width={120}
+          height={80}
+          width={50}
           className="object-cover"
         />
       ) : (
