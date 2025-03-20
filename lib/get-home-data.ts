@@ -1,4 +1,6 @@
 import qs from "qs";
+import { flattenAttributes } from "@/lib/utils"; // Importamos la función desde la librería utils
+import { getStrapiURL } from "@/lib/utils";
 
 // Construimos la query para poblar los datos necesarios
 const homePageQuery = qs.stringify(
@@ -12,7 +14,13 @@ const homePageQuery = qs.stringify(
                 fields: ["url", "alternativeText"],
               },
               link: {
-                // Usamos "populate: true" para traer todos los campos del componente link
+                populate: true,
+              },
+            },
+          },
+          "layaout.features-section": {
+            populate: {
+              feature: {
                 populate: true,
               },
             },
@@ -21,15 +29,12 @@ const homePageQuery = qs.stringify(
       },
     },
   },
-  // Si necesitas codificar solo los valores, puedes agregar: { encodeValuesOnly: true }
   { encodeValuesOnly: true }
 );
 
 // Función para hacer fetch a Strapi
 async function fetchStrapi(path: string) {
-  const baseUrl = process.env.STRAPI_HOST || "http://localhost:1337";
-  const token = process.env.STRAPI_TOKEN || "";
-
+  const { baseUrl, token } = getStrapiURL(); // Obtiene URL y token
   const url = new URL(path, baseUrl);
   url.search = homePageQuery;
 
@@ -52,15 +57,16 @@ async function fetchStrapi(path: string) {
 
 /**
  * getHomeData
- * Consulta a "/api/home" y extrae el array de bloques.
+ * Consulta a "/api/home" y extrae el array de bloques, aplanando sus atributos.
  */
 export async function getHomeData() {
   // Ajusta el endpoint según lo definido en Strapi ("/api/home" o "/api/home-page")
   const data = await fetchStrapi("/api/home");
   console.dir(data, { depth: null });
 
-  // Extraemos los bloques del objeto de respuesta
+  // Extraemos los bloques del objeto de respuesta y aplicamos flattenAttributes
   const { blocks = [] } = data.data || {};
+  const flattenedBlocks = blocks.map((block: any) => flattenAttributes(block));
 
-  return { blocks };
+  return { blocks: flattenedBlocks };
 }
