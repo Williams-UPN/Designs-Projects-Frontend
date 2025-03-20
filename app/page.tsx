@@ -1,4 +1,4 @@
-import { getHomeData } from "@/lib/get-home-data";
+import { getHomeData } from "@/lib/get-home";
 
 import { MainSection } from "@/components/main-section";
 import { FeatureSection } from "@/components/features-section";
