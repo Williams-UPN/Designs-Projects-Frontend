@@ -7,6 +7,7 @@ interface StrapiImageProps {
   height: number;
   width: number;
   className?: string;
+  priority?: boolean; // Agregar esta línea
 }
 
 export function StrapiImage({
@@ -15,6 +16,7 @@ export function StrapiImage({
   height,
   width,
   className,
+  priority = false // Valor por defecto
 }: Readonly<StrapiImageProps>) {
   const imageUrl = getStrapiMedia(src);
   if (!imageUrl) return null;
@@ -26,6 +28,7 @@ export function StrapiImage({
       height={height}
       width={width}
       className={className}
+      priority={priority}
     />
   );
 }

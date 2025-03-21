@@ -4,6 +4,30 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Swiper navigation */
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.swiper-button-prev {
+  left: 2rem;
+}
+
+.swiper-button-next {
+  right: 2rem;
+}
+
+/* Efecto hover en slides */
+.swiper-slide {
+  transition: transform 0.3s ease;
+}
+
+.swiper-slide:hover {
+  transform: scale(1.02);
+}
+
 :root {
   --radius: 0.625rem;
   --card: oklch(1 0 0);
