@@ -1,12 +1,21 @@
-import { getHomeData } from "@/lib/get-home";
-
+import { getHomeData, getSliderData } from "@/lib/get-home";
 import { MainSection } from "@/components/main-section";
 import { FeatureSection } from "@/components/features-section";
+import ImageSlider from "@/components/ImageSlider";
 
 export default async function Home() {
-  const strapiData = await getHomeData();
-  const { blocks } = strapiData;
-  return <main>{blocks.map(blockRenderer)}</main>;
+  // Carga en paralelo
+  const [strapiData, sliderData] = await Promise.all([
+    getHomeData(),
+    getSliderData(),
+  ]);
+
+  return (
+    <main>
+      <ImageSlider slides={sliderData} />
+      {strapiData.blocks.map(blockRenderer)}
+    </main>
+  );
 }
 
 const blockComponents = {

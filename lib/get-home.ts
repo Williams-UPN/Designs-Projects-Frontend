@@ -117,3 +117,26 @@ export async function getGlobalMetadata() {
 
   return await fetchStrapi("/api/global", metadataQuery);
 }
+
+// -------------------------------------------------------------------------
+// Obtiene los datos de slides
+
+export async function getSliderData() {
+  noStore();
+  
+  const query = qs.stringify(
+    {
+      populate: {
+        image: {
+          fields: ["url", "alternativeText", "formats"],
+        },
+      },
+      sort: ["createdAt:desc"],
+    },
+    { encodeValuesOnly: true }
+  );
+
+  const response = await fetchStrapi("/api/slides", query);
+  return response.data.map((slide: any) => flattenAttributes(slide));
+}
+
