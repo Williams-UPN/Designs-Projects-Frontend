@@ -4,7 +4,6 @@ import { inter } from "@/config/fonts";
 
 import { getGlobal, getGlobalMetadata } from "@/lib/get-home";
 import { Footer } from "@/components/footer";
-// Importa tu Header como cualquier otro componente
 import { Header } from "@/components/header";
 
 export async function generateMetadata(): Promise<Metadata> {
