@@ -7,7 +7,8 @@ interface StrapiImageProps {
   height: number;
   width: number;
   className?: string;
-  priority?: boolean; // Agregar esta línea
+  priority?: boolean;
+  fill?: boolean; // Nueva prop para habilitar fill
 }
 
 export function StrapiImage({
@@ -16,7 +17,8 @@ export function StrapiImage({
   height,
   width,
   className,
-  priority = false // Valor por defecto
+  priority = false,
+  fill = false, // Valor por defecto false
 }: Readonly<StrapiImageProps>) {
   const imageUrl = getStrapiMedia(src);
   if (!imageUrl) return null;
@@ -25,10 +27,10 @@ export function StrapiImage({
     <Image
       src={imageUrl}
       alt={alt}
-      height={height}
-      width={width}
-      className={className}
       priority={priority}
+      className={className}
+      // Si fill es true, usamos la prop fill; de lo contrario, usamos height y width
+      {...(fill ? { fill: true } : { height, width })}
     />
   );
 }
