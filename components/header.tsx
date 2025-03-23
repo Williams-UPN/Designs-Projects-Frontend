@@ -1,4 +1,3 @@
-// components/header.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -7,13 +6,15 @@ import { inter } from "@/config/fonts";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 
+interface NavLink {
+  id: number;
+  url: string;
+  text: string;
+  isExternal?: boolean;
+}
+
 interface HeaderData {
-  logoText: {
-    id: number;
-    text: string | null;
-    url: string;
-    isExternal?: boolean;
-  };
+  logoText: NavLink[];
   ctaButton: {
     id: number;
     text: string;
@@ -34,10 +35,9 @@ interface HeaderProps {
 }
 
 export function Header({ data, imageIco }: HeaderProps) {
-  const { logoText, ctaButton } = data || {};
+  const { logoText = [], ctaButton } = data || {};
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // Detectar scroll
   useEffect(() => {
     function handleScroll() {
       setIsScrolled(window.scrollY > 60);
@@ -61,37 +61,27 @@ export function Header({ data, imageIco }: HeaderProps) {
         <div className="container mx-auto flex items-center justify-between px-0 h-full">
           {/* Logo a la izquierda */}
           <Logo
-            text={logoText?.text || ""}
+            text={""} 
             image={imageIco}
             isScrolled={isScrolled}
           />
 
-          {/* Menú de enlaces y botón CTA en un mismo contenedor (para escritorio) */}
+          {/* Menú de enlaces + Botón CTA */}
           <div className="hidden md:flex ml-auto items-center space-x-6">
-            <Link
-              href="/"
-              className="font-medium text-slate-900 dark:text-white hover:text-primary transition-colors"
-            >
-              Inicio
-            </Link>
-            <Link
-              href="/nosotros"
-              className="font-medium text-slate-900 dark:text-white hover:text-primary transition-colors"
-            >
-              Nosotros
-            </Link>
-            <Link
-              href="/proyectos"
-              className="font-medium text-slate-900 dark:text-white hover:text-primary transition-colors"
-            >
-              Proyectos
-            </Link>
-            <Link
-              href="/contacto"
-              className="font-medium text-slate-900 dark:text-white hover:text-primary transition-colors"
-            >
-              Contacto
-            </Link>
+            {/* Mapear enlaces provenientes de Strapi */}
+            {logoText.map((link) => (
+              <Link
+                key={link.id}
+                href={link.url}
+                className="font-medium text-slate-900 dark:text-white hover:text-primary transition-colors"
+                target={link.isExternal ? "_blank" : "_self"}
+                rel={link.isExternal ? "noopener noreferrer" : undefined}
+              >
+                {link.text}
+              </Link>
+            ))}
+
+            {/* Botón CTA */}
             <Link href={ctaButton?.url || "/"}>
               <Button className="transition-colors duration-200 hover:bg-primary/90">
                 {ctaButton?.text || "Sign in"}
@@ -124,6 +114,7 @@ export function Header({ data, imageIco }: HeaderProps) {
           </div>
         </div>
       </header>
+
       {/* Espaciador para evitar que el contenido quede tapado */}
       <div className={isScrolled ? "h-14" : "h-24"} />
     </>

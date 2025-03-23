@@ -31,7 +31,6 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-white`}>
-        {/* Renderizamos nuestro Header (Client) */}
         <Header data={header} imageIco={imageIco} />
         {children}
         <Footer data={footer} />

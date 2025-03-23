@@ -1,15 +1,15 @@
-// components/ImageSlider.tsx
 "use client";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+
 import { StrapiImage } from "@/components/strapiImage";
+import { inter } from "@/config/fonts";
 
 export interface SliderImage {
   id: number;
-  title: string;
   image: {
     url: string;
     alternativeText?: string;
@@ -19,48 +19,61 @@ export interface SliderImage {
 
 interface ImageSliderProps {
   slides: SliderImage[];
+  globalSubheading?: string;
 }
 
-export default function ImageSlider({ slides }: ImageSliderProps) {
+export default function ImageSlider({ slides, globalSubheading }: ImageSliderProps) {
+  const finalSubheading = globalSubheading || "Texto predeterminado";
+
   return (
-    // Añadimos mb-12 (o el valor que quieras) para dar espacio abajo
-    <div className="relative w-full hero-slider group mb-28">
+    <div className="relative w-full hero-slider group mb-28 overflow-visible">
       <Swiper
         modules={[Navigation, Autoplay]}
         navigation={{
           nextEl: ".swiper-button-next",
           prevEl: ".swiper-button-prev",
         }}
-        autoplay={{ delay: 5000 }}
+        autoplay={{ delay: 3000 }}
         loop
         className="w-full h-full"
       >
         {slides.map((slide) => (
           <SwiperSlide key={slide.id}>
-            <div className="relative w-full aspect-[8/3]">
-            <StrapiImage
+            <div className="relative w-full aspect-[8/3] overflow-visible">
+              <StrapiImage
                 src={slide.image.url}
-                alt={slide.image.alternativeText || slide.title}
+                alt={slide.image.alternativeText || "Imagen de slide"}
                 width={1920}
                 height={1080}
                 priority
                 className="object-cover w-full h-full"
               />
-
-              {/* Overlay y texto encima */}
-              <div className="absolute inset-0 bg-black/0 flex items-center justify-center">
-                <div className="text-center text-white max-w-4xl px-4">
-                  <h2 className="text-3xl md:text-5xl font-bold mb-4 drop-shadow-lg">
-                    {slide.title}
-                  </h2>
-                </div>
-              </div>
             </div>
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* Botones de navegación personalizados */}
+      <div
+        className={`
+          absolute
+          bottom-0
+          left-1/2
+          -translate-x-1/2
+          translate-y-1/2
+          bg-white/90 text-black
+          py-6 px-10
+          w-[64%]
+          rounded-lg shadow-md
+          z-10
+          ${inter.className}
+          text-xl md:text-6xl
+          font-bold
+          text-center
+        `}
+      >
+        {finalSubheading}
+      </div>
+
       <div className="swiper-button-prev !text-white !w-12 !h-12 !bg-black/30 !rounded-full hover:!bg-black/50 transition-all" />
       <div className="swiper-button-next !text-white !w-12 !h-12 !bg-black/30 !rounded-full hover:!bg-black/50 transition-all" />
     </div>
