@@ -2,19 +2,17 @@
 
 import Link from "next/link";
 import { Player } from "@lottiefiles/react-lottie-player";
-// Importa la animación desde el directorio public
 import animationData from "@/public/animations/Animation - 1742507720678.json";
 
 export default function NotFoundRoot() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
             <div className="space-y-4 text-center">
-                {/* Usamos la animación local */}
                 <Player
                     autoplay
                     loop
                     src={animationData}
-                    className="mx-auto h-120 w-200" // Tamaño mayor
+                    className="mx-auto h-120 w-200"
                 />
 
 

@@ -1,18 +1,20 @@
-import { getHomeData, getSliderData } from "@/lib/get-home";
+import { getGlobal, getHomeData, getSliderData } from "@/lib/get-home";
 import { MainSection } from "@/components/main-section";
 import { FeatureSection } from "@/components/features-section";
 import ImageSlider from "@/components/ImageSlider";
 
 export default async function Home() {
-  // Carga en paralelo
-  const [strapiData, sliderData] = await Promise.all([
+  const [globalData, strapiData, sliderData] = await Promise.all([
+    getGlobal(),
     getHomeData(),
     getSliderData(),
   ]);
 
+  const subheading = globalData?.data?.subHeading || "Texto predeterminado";
+
   return (
     <main>
-      <ImageSlider slides={sliderData} />
+      <ImageSlider slides={sliderData} globalSubheading={subheading} />
       {strapiData.blocks.map(blockRenderer)}
     </main>
   );
@@ -24,6 +26,7 @@ const blockComponents = {
 };
 
 function blockRenderer(block: any) {
-  const Component = blockComponents[block.__component as keyof typeof blockComponents];
+  const Component =
+    blockComponents[block.__component as keyof typeof blockComponents];
   return Component ? <Component key={block.id} data={block} /> : null;
 }
