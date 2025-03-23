@@ -106,6 +106,18 @@
   resolved "https://registry.npmjs.org/@img/sharp-win32-x64/-/sharp-win32-x64-0.33.5.tgz"
   integrity sha512-MpY/o8/8kj+EcnxwvrP4aTJSWw/aZ7JIGR4aBeZkZw5B7/Jn+tY9/VNwtcoGmdT7GfggGIU4kygOMSbYnOrAbg==
 
+"@lordicon/element@^1.10.1":
+  version "1.10.1"
+  resolved "https://registry.npmjs.org/@lordicon/element/-/element-1.10.1.tgz"
+  integrity sha512-fgsnos8LSxW36RBMlkEX2STOpHoYvF95qJ9YLYUR658WBh8zzBoFyRYmfk4rpMR4xgIhDOhq+1Znmz6mp8oe4g==
+  dependencies:
+    "@lordicon/helpers" "^1.10.1"
+
+"@lordicon/helpers@^1.10.1":
+  version "1.10.1"
+  resolved "https://registry.npmjs.org/@lordicon/helpers/-/helpers-1.10.1.tgz"
+  integrity sha512-GUOffYns36Y7j2c0oWWx0AJB80unvVnYrF1VCXJ7dAGuCyFhxuaR6NrzKgDPbY98Vn1q6b+7rRdfUEyXISiQgQ==
+
 "@lottiefiles/react-lottie-player@^3.6.0":
   version "3.6.0"
   resolved "https://registry.npmjs.org/@lottiefiles/react-lottie-player/-/react-lottie-player-3.6.0.tgz"

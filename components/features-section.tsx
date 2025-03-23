@@ -56,7 +56,23 @@ function getBorderClasses(index: number, total: number) {
 
 export function FeatureSection({ data }: { readonly data: FeatureSectionProps }) {
   return (
-    <div className="container mx-auto px-4 py-6 md:px-6 lg:py-24">
+    <div className="container mx-auto px-4 py-6 md:px-35 lg:py-24">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center mb-12">
+
+        {/* Columna Izquierda */}
+        <div>
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mb-20">
+            {data.title}
+          </h2>
+        </div>
+
+        {/* Columna Derecha */}
+        <div>
+          <p className="text-gray-500 text-justify text-sm leading-relaxed">
+            {data.description}
+          </p>
+        </div>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
         {data.feature.map((feature, index) => {
           const [isHovered, setIsHovered] = useState(false);
@@ -69,7 +85,7 @@ export function FeatureSection({ data }: { readonly data: FeatureSectionProps })
               onMouseLeave={() => setIsHovered(false)}
               className={`
                 group
-                p-6
+                pt-12 p-8
                 flex flex-col
                 items-start text-left
                 shadow-md
@@ -83,7 +99,7 @@ export function FeatureSection({ data }: { readonly data: FeatureSectionProps })
               {/* Ícono arriba del título */}
               {getIcon(feature.icon, isHovered)}
 
-              <h2 className="mt-4 mb-2 text-xl font-bold text-gray-800">
+              <h2 className="mt-4 mb-3 text-xl font-bold text-gray-800">
                 {feature.heading}
               </h2>
 

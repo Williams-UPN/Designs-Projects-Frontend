@@ -3,36 +3,6 @@ import { flattenAttributes } from "@/lib/utils";
 import { getStrapiURL } from "@/lib/utils";
 import { unstable_noStore as noStore } from "next/cache";
 
-// Este query se usa si no se recibe otro query en fetchStrapi:
-const homePageQuery = qs.stringify(
-  {
-    populate: {
-      blocks: {
-        on: {
-          "layaout.main-section": {
-            populate: {
-              image: {
-                fields: ["url", "alternativeText"],
-              },
-              link: {
-                populate: true,
-              },
-            },
-          },
-          "layaout.features-section": {
-            populate: {
-              feature: {
-                populate: true,
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-  { encodeValuesOnly: true }
-);
-
 async function fetchStrapi(path: string, queryString?: string) {
   const { baseUrl, token } = getStrapiURL();
   const url = new URL(path, baseUrl);
@@ -56,6 +26,26 @@ async function fetchStrapi(path: string, queryString?: string) {
     throw error;
   }
 }
+
+// Este query se usa si no se recibe otro query en fetchStrapi:
+const homePageQuery = qs.stringify(
+  {
+    populate: {
+      blocks: {
+        on: {
+          "layaout.features-section": {
+            populate: {
+              feature: {
+                populate: true,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  { encodeValuesOnly: true }
+);
 
 // -------------------------------------------------------------------------
 // Obtiene los datos de la página "home"
