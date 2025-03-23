@@ -62,11 +62,11 @@ export default function ImageSlider({ slides, globalSubheading }: ImageSliderPro
           translate-y-1/2
           bg-white/90 text-black
           py-6 px-10
-          w-[64%]
+          w-[52%]
           rounded-lg shadow-md
           z-10
           ${inter.className}
-          text-xl md:text-6xl
+          text-xl md:text-5xl
           font-bold
           text-center
         `}
