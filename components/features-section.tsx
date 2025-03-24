@@ -56,7 +56,7 @@ function getBorderClasses(index: number, total: number) {
 
 export function FeatureSection({ data }: { readonly data: FeatureSectionProps }) {
   return (
-    <div className="container mx-auto px-4 py-6 md:px-35 lg:py-24">
+    <div className="container mx-auto px-4 py-6 md:px-35 lg:py-12">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center mb-12">
 
         {/* Columna Izquierda */}

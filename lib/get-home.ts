@@ -10,6 +10,8 @@ async function fetchStrapi(path: string, queryString?: string) {
   // Si se pasó una queryString, úsala; de lo contrario, usa homePageQuery
   url.search = queryString ?? homePageQuery;
 
+  console.log("Fetching URL:", url.toString()); // Depuración: Imprime la URL
+
   try {
     const res = await fetch(url.toString(), {
       headers: {
@@ -18,6 +20,8 @@ async function fetchStrapi(path: string, queryString?: string) {
       },
     });
     if (!res.ok) {
+      const errorData = await res.json(); // Intenta obtener más detalles del error
+      console.error("Error response from Strapi:", errorData); // Depuración: Imprime la respuesta de error
       throw new Error(`Error HTTP: ${res.status}`);
     }
     return await res.json();
@@ -33,10 +37,23 @@ const homePageQuery = qs.stringify(
     populate: {
       blocks: {
         on: {
+          // Poblamos la sección de features
           "layaout.features-section": {
             populate: {
               feature: {
                 populate: true,
+              },
+            },
+          },
+          // Poblamos la sección de servicios: en este caso, el campo "image" está dentro de "link"
+          "layaout.services-section": {
+            populate: {
+              link: {
+                populate: {
+                  image: {
+                    fields: ["url", "alternativeText"],
+                  },
+                },
               },
             },
           },
@@ -46,6 +63,9 @@ const homePageQuery = qs.stringify(
   },
   { encodeValuesOnly: true }
 );
+
+
+
 
 // -------------------------------------------------------------------------
 // Obtiene los datos de la página "home"
