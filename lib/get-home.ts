@@ -88,18 +88,15 @@ export async function getGlobal() {
   const globalQuery = qs.stringify(
     {
       populate: {
-        // Imagen a nivel raíz
         imageIco: {
           fields: ["url", "alternativeText"],
         },
-        // Luego populamos el header
         header: {
           populate: {
             logoText: true,
             ctaButton: true,
           },
         },
-        // Y el footer
         footer: {
           populate: {
             logoText: true,

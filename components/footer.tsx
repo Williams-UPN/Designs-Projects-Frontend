@@ -48,18 +48,19 @@ export function Footer({ data }: Readonly<FooterProps>) {
     : logoText;    // si ya es objeto, lo usamos directo
 
   return (
-    <div className={`${inter.className} dark bg-gray-900 text-white py-8`}>
-      <div className="container mx-auto px-4 md:px-6 flex flex-col md:flex-row items-center justify-between">
+    <footer className={`${inter.className} bg-gray-900 text-white py-8 dark:bg-gray-900`}>
+      <div className="container mx-auto px-4 md:px-6 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+        
         {/* Logo */}
         <Logo dark text={singleLogoText?.text || "Logo"} />
 
-        {/* Texto del footer */}
-        <p className="mt-4 md:mt-0 text-sm text-gray-300">
+        {/* Texto del footer (centrado en móvil, alineado a la izquierda en escritorio) */}
+        <p className="text-sm text-gray-300 text-center md:text-left">
           {text || "Made with love"}
         </p>
 
-        {/* Redes sociales */}
-        <div className="flex items-center space-x-4">
+        {/* Redes sociales (centradas en móvil, a la derecha en escritorio) */}
+        <div className="flex items-center justify-center space-x-4">
           {socialLink?.map((link) => (
             <Link
               className="text-white hover:text-gray-300"
@@ -73,6 +74,6 @@ export function Footer({ data }: Readonly<FooterProps>) {
           ))}
         </div>
       </div>
-    </div>
+    </footer>
   );
 }

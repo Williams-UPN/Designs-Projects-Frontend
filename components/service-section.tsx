@@ -28,17 +28,17 @@ interface ServicesSectionBlock {
 
 export function ServiceSection({ data }: { data: ServicesSectionBlock }) {
   return (
-    <section className="bg-white py-0">
-      <div className="container mx-auto px-4 md:px-35 lg:py-6">
+    <section className="bg-white py-6 md:py-8">
+      <div className="container mx-auto px-4 md:px-35">
         {/* Título principal */}
         {data.mainHeading && (
-          <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mb-20 text-center">
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mb-10 md:mb-20 text-center">
             {data.mainHeading}
           </h2>
         )}
 
         {/* Contenedor de tarjetas */}
-        <div className="flex flex-wrap justify-center gap-13">
+        <div className="flex flex-wrap justify-center gap-6 md:gap-13">
           {data.link?.map((service) => {
             // Obtenemos la URL de la imagen y la convertimos a absoluta
             const rawUrl =
@@ -48,7 +48,11 @@ export function ServiceSection({ data }: { data: ServicesSectionBlock }) {
             return (
               <div
                 key={service.id}
-                className="w-full sm:w-1/2 lg:w-1/3 max-w-sm bg-white shadow-md rounded-lg pt-12 p-8"
+                className="
+                  w-full sm:w-1/2 lg:w-1/3 max-w-sm 
+                  bg-white shadow-md rounded-lg 
+                  pt-8 md:pt-12 p-6 md:p-8
+                "
               >
                 {/* Imagen */}
                 {finalUrl && (
@@ -65,7 +69,7 @@ export function ServiceSection({ data }: { data: ServicesSectionBlock }) {
                 </h3>
 
                 {/* Descripción */}
-                <p className="text-gray-500 text-justify text-sm leading-relaxed text-center">
+                <p className="text-gray-500 text-sm leading-relaxed text-center">
                   {service.subHeading}
                 </p>
 
