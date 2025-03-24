@@ -60,7 +60,7 @@ export function Header({ data, imageIco }: HeaderProps) {
           ${inter.className} 
           fixed top-0 left-0 w-full z-50 
           transition-all duration-300
-          ${isScrolled ? "bg-white/90 shadow-md h-16" : "bg-white h-24"}
+          ${isScrolled ? "bg-white/70 shadow-md h-16" : "bg-white h-24"}
           dark:bg-gray-800
           backdrop-blur-sm
         `}
