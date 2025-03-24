@@ -2,9 +2,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { inter } from "@/config/fonts";
 
-import { getGlobal, getGlobalMetadata } from "@/lib/get-home";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import { getHomeData, getGlobalMetadata } from "@/lib/get-home";
 
 export async function generateMetadata(): Promise<Metadata> {
   const metadata = await getGlobalMetadata();
@@ -19,21 +19,27 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const globalData = await getGlobal();
-  console.dir(globalData, { depth: null });
+  const homeData = await getHomeData();
+  console.dir(homeData, { depth: null });
 
-  if (!globalData?.data) {
+  // Extraemos el bloque correspondiente al header y al footer
+  const headerBlock = homeData.blocks.find(
+    (block: any) => block.__component === "layaout.header"
+  );
+  const footerBlock = homeData.blocks.find(
+    (block: any) => block.__component === "layaout.footer"
+  );
+
+  if (!headerBlock || !footerBlock) {
     throw new Error("No se han recibido datos globales");
   }
-
-  const { header, footer, imageIco } = globalData.data;
 
   return (
     <html lang="en">
       <body className={`${inter.className} bg-white`}>
-        <Header data={header} imageIco={imageIco} />
+        <Header data={headerBlock} imageIco={headerBlock.imageIco} />
         {children}
-        <Footer data={footer} />
+        <Footer data={footerBlock} />
       </body>
     </html>
   );
