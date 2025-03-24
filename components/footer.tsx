@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { inter } from "@/config/fonts";
-import { FaYoutube, FaGithub } from "react-icons/fa";
-import { RiTwitterXFill } from "react-icons/ri";
+// Importamos los íconos deseados
+import { FaYoutube, FaFacebookF, FaInstagram } from "react-icons/fa";
+import { SiTiktok } from "react-icons/si";
 
 interface SocialLink {
   id: number;
@@ -28,9 +29,11 @@ interface FooterProps {
 }
 
 function selectSocialIcon(url: string) {
+  // Detecta la red social por la URL
   if (url.includes("youtube")) return <FaYoutube className="h-6 w-6" />;
-  if (url.includes("twitter") || url.includes("x.com")) return <RiTwitterXFill className="h-6 w-6" />;
-  if (url.includes("github")) return <FaGithub className="h-6 w-6" />;
+  if (url.includes("tiktok")) return <SiTiktok className="h-6 w-6" />;
+  if (url.includes("facebook")) return <FaFacebookF className="h-6 w-6" />;
+  if (url.includes("instagram")) return <FaInstagram className="h-6 w-6" />;
   return null;
 }
 
@@ -54,12 +57,12 @@ export function Footer({ data }: Readonly<FooterProps>) {
         {/* Logo */}
         <Logo dark text={singleLogoText?.text || "Logo"} />
 
-        {/* Texto del footer (centrado en móvil, alineado a la izquierda en escritorio) */}
+        {/* Texto del footer */}
         <p className="text-sm text-gray-300 text-center md:text-left">
           {text || "Made with love"}
         </p>
 
-        {/* Redes sociales (centradas en móvil, a la derecha en escritorio) */}
+        {/* Redes sociales */}
         <div className="flex items-center justify-center space-x-4">
           {socialLink?.map((link) => (
             <Link
