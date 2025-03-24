@@ -7,10 +7,10 @@ async function fetchStrapi(path: string, queryString?: string) {
   const { baseUrl, token } = getStrapiURL();
   const url = new URL(path, baseUrl);
 
-  // Si se pasó una queryString, úsala; de lo contrario, usa homePageQuery
+  // Usa la query recibida o, de lo contrario, usa homePageQuery (unificada)
   url.search = queryString ?? homePageQuery;
 
-  console.log("Fetching URL:", url.toString()); // Depuración: Imprime la URL
+  console.log("Fetching URL:", url.toString());
 
   try {
     const res = await fetch(url.toString(), {
@@ -20,8 +20,8 @@ async function fetchStrapi(path: string, queryString?: string) {
       },
     });
     if (!res.ok) {
-      const errorData = await res.json(); // Intenta obtener más detalles del error
-      console.error("Error response from Strapi:", errorData); // Depuración: Imprime la respuesta de error
+      const errorData = await res.json();
+      console.error("Error response from Strapi:", errorData);
       throw new Error(`Error HTTP: ${res.status}`);
     }
     return await res.json();
@@ -31,13 +31,24 @@ async function fetchStrapi(path: string, queryString?: string) {
   }
 }
 
-// Este query se usa si no se recibe otro query en fetchStrapi:
+// Query unificada para obtener todos los componentes en blocks: SEO, header, features, services y footer
 const homePageQuery = qs.stringify(
   {
     populate: {
       blocks: {
         on: {
-          // Poblamos la sección de features
+          "layaout.seo": {
+            populate: "*", // Pobla todos los campos del bloque SEO
+          },
+          "layaout.header": {
+            populate: {
+              imageIco: {
+                fields: ["url", "alternativeText"],
+              },
+              logoText: true,
+              ctaButton: true,
+            },
+          },
           "layaout.features-section": {
             populate: {
               feature: {
@@ -45,7 +56,6 @@ const homePageQuery = qs.stringify(
               },
             },
           },
-          // Poblamos la sección de servicios: en este caso, el campo "image" está dentro de "link"
           "layaout.services-section": {
             populate: {
               link: {
@@ -57,6 +67,12 @@ const homePageQuery = qs.stringify(
               },
             },
           },
+          "layaout.footer": {
+            populate: {
+              logoText: true,
+              socialLink: true,
+            },
+          },
         },
       },
     },
@@ -64,70 +80,46 @@ const homePageQuery = qs.stringify(
   { encodeValuesOnly: true }
 );
 
-
-
-
 // -------------------------------------------------------------------------
-// Obtiene los datos de la página "home"
+// Obtiene los datos de la página "home" (con todos los bloques: SEO, header, features, services, footer)
 export async function getHomeData() {
   noStore();
   const data = await fetchStrapi("/api/home");
   console.dir(data, { depth: null });
 
-  const { blocks = [] } = data.data || {};
+  // Extraemos blocks y subHeading del objeto principal
+  const { blocks = [], subHeading } = data.data || {};
+
+  // Aplanamos cada bloque para facilitar el uso de sus campos
   const flattenedBlocks = blocks.map((block: any) => flattenAttributes(block));
 
-  return { blocks: flattenedBlocks };
+  // Retornamos blocks y subHeading
+  return {
+    blocks: flattenedBlocks,
+    subHeading, // "Donde cada detalle cuenta una historia"
+  };
 }
 
-// -------------------------------------------------------------------------
-// Obtiene los datos globales (header, footer)
-export async function getGlobal() {
-  noStore();
-
-  const globalQuery = qs.stringify(
-    {
-      populate: {
-        imageIco: {
-          fields: ["url", "alternativeText"],
-        },
-        header: {
-          populate: {
-            logoText: true,
-            ctaButton: true,
-          },
-        },
-        footer: {
-          populate: {
-            logoText: true,
-            socialLink: true,
-          },
-        },
-      },
-    },
-    { encodeValuesOnly: true }
-  );
-
-  return await fetchStrapi("/api/global", globalQuery);
-}
 
 // -------------------------------------------------------------------------
-// Obtiene sólo metadatos (title, description)
+// Obtiene sólo metadatos (title, description) desde /api/home
+// En este caso, como home no tiene title/description a nivel root, extraemos del bloque SEO.
 export async function getGlobalMetadata() {
   noStore();
-  const metadataQuery = qs.stringify(
-    {
-      fields: ["title", "description"],
-    },
-    { encodeValuesOnly: true }
-  );
+  const data = await fetchStrapi("/api/home");
+  const { blocks = [] } = data.data || {};
+  const seoBlock = blocks.find((block: any) => block.__component === "layaout.seo");
 
-  return await fetchStrapi("/api/global", metadataQuery);
+  return {
+    data: {
+      title: seoBlock?.title || "Epic Next Course",
+      description: seoBlock?.description || "Epic Next Course",
+    },
+  };
 }
 
 // -------------------------------------------------------------------------
 // Obtiene los datos de slides
-
 export async function getSliderData() {
   noStore();
   
@@ -146,4 +138,3 @@ export async function getSliderData() {
   const response = await fetchStrapi("/api/slides", query);
   return response.data.map((slide: any) => flattenAttributes(slide));
 }
-
