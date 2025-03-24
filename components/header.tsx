@@ -37,6 +37,8 @@ interface HeaderProps {
 export function Header({ data, imageIco }: HeaderProps) {
   const { logoText = [], ctaButton } = data || {};
   const [isScrolled, setIsScrolled] = useState(false);
+  // Estado para el menú móvil
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     function handleScroll() {
@@ -46,6 +48,11 @@ export function Header({ data, imageIco }: HeaderProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Función para alternar el menú móvil
+  function toggleMenu() {
+    setMenuOpen((prev) => !prev);
+  }
+
   return (
     <>
       <header
@@ -53,22 +60,17 @@ export function Header({ data, imageIco }: HeaderProps) {
           ${inter.className} 
           fixed top-0 left-0 w-full z-50 
           transition-all duration-300
-          ${isScrolled ? "bg-white/90 shadow-md h-16" : "bg-white h-25"}
+          ${isScrolled ? "bg-white/90 shadow-md h-16" : "bg-white h-24"}
           dark:bg-gray-800
           backdrop-blur-sm
         `}
       >
-        <div className="container mx-auto flex items-center justify-between px-0 h-full">
+        <div className="container mx-auto flex items-center justify-between px-4 md:px-8 h-full">
           {/* Logo a la izquierda */}
-          <Logo
-            text={""} 
-            image={imageIco}
-            isScrolled={isScrolled}
-          />
+          <Logo text={""} image={imageIco} isScrolled={isScrolled} />
 
-          {/* Menú de enlaces + Botón CTA */}
+          {/* Menú de enlaces + Botón CTA para pantallas medianas en adelante */}
           <div className="hidden md:flex ml-auto items-center space-x-6">
-            {/* Mapear enlaces provenientes de Strapi */}
             {logoText.map((link) => (
               <Link
                 key={link.id}
@@ -81,7 +83,6 @@ export function Header({ data, imageIco }: HeaderProps) {
               </Link>
             ))}
 
-            {/* Botón CTA */}
             <Link href={ctaButton?.url || "/"}>
               <Button className="transition-colors duration-200 hover:bg-primary/90">
                 {ctaButton?.text || "Sign in"}
@@ -89,12 +90,13 @@ export function Header({ data, imageIco }: HeaderProps) {
             </Link>
           </div>
 
-          {/* Menú móvil: icono hamburguesa */}
+          {/* Menú móvil: icono hamburguesa para pantallas pequeñas */}
           <div className="flex md:hidden items-center">
             <button
               type="button"
               className="text-slate-900 dark:text-white focus:outline-none"
               aria-label="Abrir menú"
+              onClick={toggleMenu}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -113,10 +115,48 @@ export function Header({ data, imageIco }: HeaderProps) {
             </button>
           </div>
         </div>
+
+        {/* Menú móvil desplegable (solo visible cuando menuOpen === true) */}
+        {menuOpen && (
+          <nav
+            className="
+              absolute top-[calc(100%+0.5rem)]
+              left-0 w-full
+              bg-white dark:bg-gray-800
+              border-t border-gray-200 dark:border-gray-700
+              shadow-md
+              px-4 py-4
+              flex flex-col space-y-3
+              md:hidden
+            "
+          >
+            {logoText.map((link) => (
+              <Link
+                key={link.id}
+                href={link.url}
+                className="font-medium text-slate-900 dark:text-white hover:text-primary transition-colors"
+                target={link.isExternal ? "_blank" : "_self"}
+                rel={link.isExternal ? "noopener noreferrer" : undefined}
+                onClick={() => setMenuOpen(false)} // Cierra el menú al hacer clic
+              >
+                {link.text}
+              </Link>
+            ))}
+
+            <Link
+              href={ctaButton?.url || "/"}
+              onClick={() => setMenuOpen(false)} // Cierra el menú al hacer clic
+            >
+              <Button className="transition-colors duration-200 hover:bg-primary/90 w-full">
+                {ctaButton?.text || "Sign in"}
+              </Button>
+            </Link>
+          </nav>
+        )}
       </header>
 
       {/* Espaciador para evitar que el contenido quede tapado */}
-      <div className={isScrolled ? "h-14" : "h-24"} />
+      <div className={isScrolled ? "h-16" : "h-24"} />
     </>
   );
 }

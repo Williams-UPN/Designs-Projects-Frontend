@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 
+// Cambia el color del ícono al hacer hover.
 function getIcon(name: string, isHovered: boolean) {
-  const iconColor = isHovered ? "#FFD700" : "currentColor"; // Negro por defecto, amarillo en hover
+  const iconColor = isHovered ? "#FFD700" : "currentColor";
   switch (name) {
     case "FIRST_ICON":
       return <ClockIcon className="w-12 h-12" stroke={iconColor} />;
@@ -31,22 +32,19 @@ interface FeatureSectionProps {
   feature: FeatureProps[];
 }
 
-// Función para controlar qué bordes mostrar en cada columna
+// Controla los bordes de cada columna
 function getBorderClasses(index: number, total: number) {
   if (index === 0) {
-    // Primera columna
     return `
       rounded-l-xl
       border-l border-t border-b border-r-0
     `;
   } else if (index === total - 1) {
-    // Última columna
     return `
       rounded-r-xl
       border-r border-t border-b border-l-0
     `;
   } else {
-    // Columna del medio
     return `
       border-t border-b
       border-l-0 border-r-0
@@ -58,14 +56,13 @@ export function FeatureSection({ data }: { readonly data: FeatureSectionProps })
   return (
     <div className="container mx-auto px-4 py-6 md:px-35 lg:py-12">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center mb-12">
-
         {/* Columna Izquierda */}
         <div>
-          <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mb-20">
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mb-4 md:mb-20">
             {data.title}
           </h2>
-        </div>
 
+        </div>
         {/* Columna Derecha */}
         <div>
           <p className="text-gray-500 text-justify text-sm leading-relaxed">
@@ -73,6 +70,8 @@ export function FeatureSection({ data }: { readonly data: FeatureSectionProps })
           </p>
         </div>
       </div>
+
+      {/* Mantiene 1 columna en móvil y 3 columnas en pantallas md o mayores, con gap-0 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
         {data.feature.map((feature, index) => {
           const [isHovered, setIsHovered] = useState(false);
@@ -96,7 +95,7 @@ export function FeatureSection({ data }: { readonly data: FeatureSectionProps })
                 border-gray-200
               `}
             >
-              {/* Ícono arriba del título */}
+              {/* Ícono */}
               {getIcon(feature.icon, isHovered)}
 
               <h2 className="mt-4 mb-3 text-xl font-bold text-gray-800">
@@ -114,6 +113,7 @@ export function FeatureSection({ data }: { readonly data: FeatureSectionProps })
   );
 }
 
+/* Íconos (se mantienen iguales) */
 function CheckIcon(props: any) {
   return (
     <svg
