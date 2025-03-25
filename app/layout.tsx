@@ -4,6 +4,7 @@ import { inter } from "@/config/fonts";
 
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import { FloatingSocialButtons } from "@/components/FloatingSocialButtons";
 import { getHomeData, getGlobalMetadata } from "@/lib/get-home";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -40,6 +41,8 @@ export default async function RootLayout({
         <Header data={headerBlock} imageIco={headerBlock.imageIco} />
         {children}
         <Footer data={footerBlock} />
+        {/* Agrega aquí el botón flotante */}
+        <FloatingSocialButtons socialLink={footerBlock.socialLink} />
       </body>
     </html>
   );
