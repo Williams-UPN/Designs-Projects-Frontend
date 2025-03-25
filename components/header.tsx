@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation"; // <-- Importa el hook
 import { inter } from "@/config/fonts";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
@@ -37,9 +38,15 @@ interface HeaderProps {
 export function Header({ data, imageIco }: HeaderProps) {
   const { logoText = [], ctaButton } = data || {};
   const [isScrolled, setIsScrolled] = useState(false);
-  // Estado para el menú móvil
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // Hook de Next.js para obtener la ruta actual
+  const pathname = usePathname();
+
+  // Solo mostramos "Inicio" si NO estamos en la ruta "/"
+  const showInicio = pathname !== "/";
+
+  // Lógica de scroll
   useEffect(() => {
     function handleScroll() {
       setIsScrolled(window.scrollY > 60);
@@ -48,17 +55,21 @@ export function Header({ data, imageIco }: HeaderProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Función para alternar el menú móvil
   function toggleMenu() {
     setMenuOpen((prev) => !prev);
   }
+
+  // Opcional: Insertamos "Inicio" al principio de logoText si showInicio === true
+  const finalLinks = showInicio
+    ? [{ id: 9999, url: "/", text: "Inicio" }, ...logoText]
+    : logoText;
 
   return (
     <>
       <header
         className={`
-          ${inter.className} 
-          fixed top-0 left-0 w-full z-50 
+          ${inter.className}
+          fixed top-0 left-0 w-full z-50
           transition-all duration-300
           ${isScrolled ? "bg-white/70 shadow-md h-16" : "bg-white h-24"}
           dark:bg-gray-800
@@ -71,7 +82,7 @@ export function Header({ data, imageIco }: HeaderProps) {
 
           {/* Menú de enlaces + Botón CTA para pantallas medianas en adelante */}
           <div className="hidden md:flex ml-auto items-center space-x-6">
-            {logoText.map((link) => (
+            {finalLinks.map((link) => (
               <Link
                 key={link.id}
                 href={link.url}
@@ -105,12 +116,7 @@ export function Header({ data, imageIco }: HeaderProps) {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 8h16M4 16h16"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h16M4 16h16" />
               </svg>
             </button>
           </div>
@@ -130,7 +136,7 @@ export function Header({ data, imageIco }: HeaderProps) {
               md:hidden
             "
           >
-            {logoText.map((link) => (
+            {finalLinks.map((link) => (
               <Link
                 key={link.id}
                 href={link.url}
@@ -145,7 +151,7 @@ export function Header({ data, imageIco }: HeaderProps) {
 
             <Link
               href={ctaButton?.url || "/"}
-              onClick={() => setMenuOpen(false)} // Cierra el menú al hacer clic
+              onClick={() => setMenuOpen(false)}
             >
               <Button className="transition-colors duration-200 hover:bg-primary/90 w-full">
                 {ctaButton?.text || "Sign in"}
