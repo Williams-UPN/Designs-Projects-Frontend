@@ -7,12 +7,12 @@ import animationData from "@/public/animations/Animation - 1742507720678.json";
 export default function NotFoundRoot() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
-      <div className="space-y-4 sm:space-y-6 md:space-y-8 text-center">
+      <div className="space-y-4 sm:space-y-6 md:space-y-2 text-center">
         <Player
           autoplay
           loop
           src={animationData}
-          className="mx-auto w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96"
+          className="mx-auto w-64 h-64 sm:w-80 sm:h-80 md:w-140 md:h-120"
         />
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
           Oops! Página en construcción
