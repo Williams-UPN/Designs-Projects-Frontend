@@ -38,20 +38,24 @@ export function ServiceSection({ data }: { data: ServicesSectionBlock }) {
         )}
 
         {/* Contenedor de tarjetas */}
-        <div className="flex flex-wrap justify-center gap-6 md:gap-13">
+        <div className="flex flex-wrap justify-center items-stretch gap-6 md:gap-13">
           {data.link?.map((service) => {
-            // Obtenemos la URL de la imagen y la convertimos a absoluta
+            // Obtenemos la URL de la imagen
             const rawUrl =
               service.image?.formats?.thumbnail?.url || service.image?.url;
             const finalUrl = rawUrl ? getStrapiMedia(rawUrl) : null;
+
+            // Definimos la URL del enlace, si no existe en la API, se usa /Nosotros
+            const linkUrl = service.url || "/Nosotros";
 
             return (
               <div
                 key={service.id}
                 className="
-                  w-full sm:w-1/2 lg:w-1/3 max-w-sm 
-                  bg-white shadow-md rounded-lg 
+                  w-full sm:w-1/2 lg:w-1/3 max-w-sm
+                  bg-white shadow-md rounded-lg
                   pt-8 md:pt-12 p-6 md:p-8
+                  flex flex-col
                 "
               >
                 {/* Imagen */}
@@ -69,19 +73,26 @@ export function ServiceSection({ data }: { data: ServicesSectionBlock }) {
                 </h3>
 
                 {/* Descripción */}
-                <p className="text-gray-500 text-sm leading-relaxed text-center">
+                <p className="text-gray-500 text-justify text-sm leading-relaxed">
                   {service.subHeading}
                 </p>
 
-                {/* Enlace (opcional) */}
-                <a
-                  href={service.url}
-                  target={service.isExternal ? "_blank" : "_self"}
-                  rel="noopener noreferrer"
-                  className="inline-block mt-3 text-blue-500 hover:underline"
-                >
-                  Ver más
-                </a>
+                {/* Botón al final (mt-auto) */}
+                <div className="mt-auto pt-3">
+                  <a
+                    href={linkUrl}
+                    target={service.isExternal && service.url ? "_blank" : "_self"}
+                    rel="noopener noreferrer"
+                    className="
+                      block mx-auto text-white
+                      bg-[#3EA6D2] hover:bg-[#B4000A]
+                      px-6 py-2 rounded-full text-center
+                      transition-colors duration-300
+                    "
+                  >
+                    Ver más
+                  </a>
+                </div>
               </div>
             );
           })}

@@ -40,8 +40,7 @@ export default async function RootLayout({
       <body className={`${inter.className} bg-white`}>
         <Header data={headerBlock} imageIco={headerBlock.imageIco} />
         {children}
-        <Footer data={footerBlock} />
-        {/* Agrega aquí el botón flotante */}
+        <Footer data={footerBlock} imageIco={headerBlock.imageIco} />
         <FloatingSocialButtons socialLink={footerBlock.socialLink} />
       </body>
     </html>

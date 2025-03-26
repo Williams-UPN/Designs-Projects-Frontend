@@ -1,6 +1,20 @@
+"use client";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { inter } from "@/config/fonts";
+import { FaInstagram, FaMapMarkerAlt, FaWhatsapp } from "react-icons/fa";
+
+type LogoText = {
+  id: number;
+  text: string;
+  url: string;
+};
+
+interface GlobalImageIco {
+  id?: number;
+  url: string;
+  alternativeText?: string;
+}
 
 interface SocialLink {
   id: number;
@@ -9,62 +23,111 @@ interface SocialLink {
   isExternal?: boolean;
 }
 
-// Definimos un tipo para el logo:
-type LogoText = {
-  id: number;
-  text: string;
-  url: string;
-};
-
 interface FooterProps {
   data: {
-    // Aquí permitimos que logoText sea un único objeto O un array de objetos
     logoText: LogoText | LogoText[];
     text: string;
-    socialLink: SocialLink[];
+    socialLink?: SocialLink[];
   };
+  imageIco?: GlobalImageIco;
 }
 
-export function Footer({ data }: Readonly<FooterProps>) {
+export function Footer({ data, imageIco }: Readonly<FooterProps>) {
   if (!data) {
     console.error("No se han recibido datos para el Footer");
     return null;
   }
 
-  const { logoText, text } = data;
+  const { logoText, text, socialLink } = data;
+  const singleLogoText = Array.isArray(logoText) ? logoText[0] : logoText;
 
-  // Conviértelo a un solo objeto, aunque sea un array
-  const singleLogoText = Array.isArray(logoText)
-    ? logoText[0]
-    : logoText;
+  // Redes sociales específicas
+  const instagram = socialLink?.find((link) =>
+    link.text.toLowerCase().includes("instagram") ||
+    link.url.toLowerCase().includes("instagram")
+  );
+  const whatsapp = socialLink?.find((link) =>
+    link.text.toLowerCase().includes("whatsapp") ||
+    link.url.toLowerCase().includes("whatsapp") ||
+    link.url.toLowerCase().includes("wa.me")
+  );
 
   return (
-    <footer className={`${inter.className} bg-gray-900 text-white py-8 dark:bg-gray-900`}>
-      <div className="container mx-auto px-4 md:px-6 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-        {/* Logo */}
-        <Logo dark text={singleLogoText?.text || "Logo"} />
+    <footer className={`${inter.className} bg-white text-base`}>
+      <div className="container mx-auto px-6 md:px-40 py-6">
+        {/* Sección Superior: Dos columnas */}
+        <div className="flex flex-col md:flex-row items-center justify-between">
+          {/* Columna Izquierda: Logo e Instagram */}
+          <div className="flex flex-col items-center space-y-4 md:items-start">
+            <Logo
+              dark
+              text={singleLogoText?.text || "Construingenio"}
+              image={imageIco}
+            />
+            {instagram && (
+              <div className="flex items-center space-x-2">
+                <Link
+                  href={instagram.url}
+                  target={instagram.isExternal ? "_blank" : "_self"}
+                  rel={instagram.isExternal ? "noopener noreferrer" : undefined}
+                  className="
+                    flex items-center space-x-2
+                    text-gray-800
+                    hover:text-[#B4000A]
+                    transition-colors
+                  "
+                >
+                  <FaInstagram className="w-5 h-5" />
+                  <span>Seguir en Instagram</span>
+                </Link>
+              </div>
+            )}
+          </div>
 
-        {/* Texto del footer */}
-        <p className="text-sm text-gray-300 text-center md:text-left">
-          {text || "Made with love"}
-        </p>
-
-        {/* Eliminamos la sección de redes sociales */}
-        {/* 
-        <div className="flex items-center justify-center space-x-4">
-          {socialLink?.map((link) => (
+          {/* Columna Derecha: Dirección y WhatsApp */}
+          <div className="mt-6 md:mt-0 flex flex-col items-start space-y-2">
+            {/* Dirección con Link a Maps */}
             <Link
-              className="text-white hover:text-gray-300"
-              href={link.url}
-              key={link.id}
-              target={link.isExternal ? "_blank" : "_self"}
+              href="https://maps.app.goo.gl/jULwTjdwhwfkq7D46"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+                flex items-center space-x-2
+                text-gray-800
+                hover:text-[#B4000A]
+                transition-colors
+              "
             >
-              {selectSocialIcon(link.url)}
-              <span className="sr-only">Visit us at {link.text}</span>
+              <FaMapMarkerAlt className="w-5 h-5" />
+              <span className="text-left">
+                Cal. San Borja Mza. G Lote. 15 P.J. San Borja, Pomalca, Chiclayo, Lambayeque, Perú
+              </span>
             </Link>
-          ))}
+            {whatsapp && (
+              <div className="flex items-center space-x-2">
+                <Link
+                  href={whatsapp.url}
+                  target={whatsapp.isExternal ? "_blank" : "_self"}
+                  rel={whatsapp.isExternal ? "noopener noreferrer" : undefined}
+                  className="
+                    flex items-center space-x-2
+                    text-gray-800
+                    hover:text-[#B4000A]
+                    transition-colors
+                  "
+                >
+                  <FaWhatsapp className="w-5 h-5" />
+                  <span>942 246 803</span>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
-        */}
+
+        {/* Sección Inferior */}
+        <div className="text-center py-6 text-gray-800 border-t border-gray-200 mt-4">
+          {text || "© 2025 - Construingenio. Todos los derechos reservados."}
+        </div>
       </div>
     </footer>
   );

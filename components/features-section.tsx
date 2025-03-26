@@ -4,14 +4,15 @@ import { useState } from "react";
 
 // Cambia el color del ícono al hacer hover.
 function getIcon(name: string, isHovered: boolean) {
-  const iconColor = isHovered ? "#FFD700" : "currentColor";
+  // Si el usuario pasa el cursor, el ícono se vuelve rojo (#B4000A)
+  const iconColor = isHovered ? "#B4000A" : "currentColor";
   switch (name) {
-    case "FIRST_ICON":
-      return <ClockIcon className="w-12 h-12" stroke={iconColor} />;
-    case "SECOND_ICON":
-      return <CheckIcon className="w-12 h-12" stroke={iconColor} />;
-    case "THIRD_ICON":
-      return <CloudIcon className="w-12 h-12" stroke={iconColor} />;
+    case "MISION_ICON":
+      return <MissionIcon className="w-12 h-12" stroke={iconColor} />;
+    case "VALORES_ICON":
+      return <ValuesIcon className="w-12 h-12" stroke={iconColor} />;
+    case "VISION_ICON":
+      return <VisionIcon className="w-12 h-12" stroke={iconColor} />;
     default:
       return null;
   }
@@ -21,7 +22,7 @@ interface FeatureProps {
   id: number;
   heading: string;
   subHeading: string;
-  icon: string;
+  icon: string; // "MISION_ICON", "VALORES_ICON", "VISION_ICON"
 }
 
 interface FeatureSectionProps {
@@ -61,7 +62,6 @@ export function FeatureSection({ data }: { readonly data: FeatureSectionProps })
           <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mb-4 md:mb-20">
             {data.title}
           </h2>
-
         </div>
         {/* Columna Derecha */}
         <div>
@@ -71,7 +71,7 @@ export function FeatureSection({ data }: { readonly data: FeatureSectionProps })
         </div>
       </div>
 
-      {/* Mantiene 1 columna en móvil y 3 columnas en pantallas md o mayores, con gap-0 */}
+      {/* 1 columna en móvil y 3 en pantallas medianas */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
         {data.feature.map((feature, index) => {
           const [isHovered, setIsHovered] = useState(false);
@@ -89,13 +89,13 @@ export function FeatureSection({ data }: { readonly data: FeatureSectionProps })
                 items-start text-left
                 shadow-md
                 transition-all duration-300
-                hover:shadow-lg hover:border-yellow-400
-                ${index === 1 ? "bg-yellow-50" : "bg-white"}
+                hover:shadow-lg hover:border-[#B4000A]
+                ${index === 1 ? "bg-[#3EA6D2]/10" : "bg-white"}
                 ${getBorderClasses(index, totalFeatures)}
                 border-gray-200
               `}
             >
-              {/* Ícono */}
+              {/* Ícono dinámico */}
               {getIcon(feature.icon, isHovered)}
 
               <h2 className="mt-4 mb-3 text-xl font-bold text-gray-800">
@@ -113,58 +113,59 @@ export function FeatureSection({ data }: { readonly data: FeatureSectionProps })
   );
 }
 
-/* Íconos (se mantienen iguales) */
-function CheckIcon(props: any) {
+/* Íconos representativos de cada tema */
+function MissionIcon(props: any) {
+  // Ícono "bandera" (flag) para Misión
   return (
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
       fill="none"
-      strokeWidth="2"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <polyline points="20 6 9 17 4 12" />
+      <path d="M2 22V2l7 3 7-3 7 3v13l-7-3-7 3-7-3Z" />
     </svg>
   );
 }
 
-function ClockIcon(props: any) {
+function ValuesIcon(props: any) {
+  // Ícono "handshake" para Valores
   return (
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
       fill="none"
-      strokeWidth="2"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 6 12 12 16 14" />
+      <path d="M8 13l-3 3a2 2 0 1 0 3 3l3-3" />
+      <path d="M16 13l3 3a2 2 0 1 1-3 3l-3-3" />
+      <path d="M12 8a2 2 0 0 0-2 2v2h4v-2a2 2 0 0 0-2-2z" />
+      <path d="M4 12v-2a4 4 0 0 1 4-4h1" />
+      <path d="M20 12v-2a4 4 0 0 0-4-4h-1" />
     </svg>
   );
 }
 
-function CloudIcon(props: any) {
+function VisionIcon(props: any) {
+  // Ícono "ojo" (eye) para Visión
   return (
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
       fill="none"
-      strokeWidth="2"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
+      <circle cx="12" cy="12" r="2" />
+      <path d="M21 12c0 3.866-4.477 7-9 7S3 15.866 3 12s4.477-7 9-7 9 3.134 9 7z" />
     </svg>
   );
 }
