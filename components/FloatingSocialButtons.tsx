@@ -6,6 +6,7 @@ import {
   FaYoutube,
   FaFacebookF,
   FaInstagram,
+  FaWhatsapp, 
   FaPlus,
   FaMinus,
 } from "react-icons/fa";
@@ -23,6 +24,8 @@ function getBrandColor(url: string) {
   if (url.includes("tiktok")) return "bg-black hover:bg-gray-800";
   if (url.includes("facebook")) return "bg-blue-600 hover:bg-blue-700";
   if (url.includes("instagram")) return "bg-pink-500 hover:bg-pink-600";
+  if (url.includes("whatsapp") || url.includes("wa.me"))
+    return "bg-green-500 hover:bg-green-600"; 
   return "bg-gray-500 hover:bg-gray-600";
 }
 
@@ -31,6 +34,8 @@ function selectSocialIcon(url: string) {
   if (url.includes("tiktok")) return <SiTiktok className="w-6 h-6" />;
   if (url.includes("facebook")) return <FaFacebookF className="w-6 h-6" />;
   if (url.includes("instagram")) return <FaInstagram className="w-6 h-6" />;
+  if (url.includes("whatsapp") || url.includes("wa.me"))
+    return <FaWhatsapp className="w-6 h-6" />;
   return null;
 }
 
