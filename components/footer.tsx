@@ -100,7 +100,7 @@ export function Footer({ data, imageIco }: Readonly<FooterProps>) {
             >
               <FaMapMarkerAlt className="w-5 h-5" />
               <span className="text-left">
-                Cal. San Borja Mza. G Lote. 15 P.J. San Borja, Pomalca, Chiclayo, Lambayeque, Perú
+                {" Cal. San Borja Mza. G Lote. 15 P.J. San Borja, Pomalca, Chiclayo, Lambayeque, Perú "}
               </span>
             </Link>
             {whatsapp && (
@@ -117,7 +117,7 @@ export function Footer({ data, imageIco }: Readonly<FooterProps>) {
                   "
                 >
                   <FaWhatsapp className="w-5 h-5" />
-                  <span>942 246 803</span>
+                  <span> {" 956 498 610"}</span>
                 </Link>
               </div>
             )}

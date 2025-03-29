@@ -113,7 +113,7 @@ export function Header({ data, imageIco }: HeaderProps) {
           <div className="flex md:hidden items-center">
             <button
               type="button"
-              className="text-white focus:outline-none"
+              className="text-slate-900 focus:outline-none"
               aria-label="Abrir menú"
               onClick={toggleMenu}
             >
