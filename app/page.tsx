@@ -4,13 +4,13 @@ import { ServiceSection } from "@/components/service-section";
 import ImageSlider from "@/components/ImageSlider";
 
 export default async function Home() {
-  // Usamos solo getHomeData y getSliderData, ya que getGlobal ya no existe
+ 
   const [homeData, sliderData] = await Promise.all([
     getHomeData(),
     getSliderData(),
   ]);
 
-  // Suponiendo que en tu homeData tienes el campo "subHeading" directamente (o lo obtienes desde algún bloque)
+
   const subheading = homeData.subHeading || "Texto predeterminado";
 
   return (
