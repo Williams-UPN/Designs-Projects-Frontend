@@ -29,10 +29,10 @@ interface ServicesSectionBlock {
 export function ServiceSection({ data }: { data: ServicesSectionBlock }) {
   return (
     <section className="bg-white py-6 md:py-8">
-      <div className="container mx-auto px-4 md:px-35">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Título principal */}
         {data.mainHeading && (
-          <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mb-10 md:mb-20 text-center">
+          <h2 className="text-2xl md:text-4xl font-bold text-[#3EA6D2] mb-10 md:mb-20 text-center">
             {data.mainHeading}
           </h2>
         )}
@@ -45,17 +45,35 @@ export function ServiceSection({ data }: { data: ServicesSectionBlock }) {
               service.image?.formats?.thumbnail?.url || service.image?.url;
             const finalUrl = rawUrl ? getStrapiMedia(rawUrl) : null;
 
-            // Definimos la URL del enlace, si no existe en la API, se usa /Nosotros
+            // Definimos la URL del enlace (por defecto /Nosotros)
             const linkUrl = service.url || "/Nosotros";
 
             return (
               <div
                 key={service.id}
+                tabIndex={0} // Permite foco con tabulador y en pantallas táctiles
                 className="
                   w-full sm:w-1/2 lg:w-1/3 max-w-sm
-                  bg-white shadow-md rounded-lg
+                  bg-white
+                  shadow-sm
+                  rounded-lg
                   pt-8 md:pt-12 p-6 md:p-8
                   flex flex-col
+                  border border-transparent
+                  transition
+                  duration-300
+                  /* Estilos hover */
+                  hover:border-[#3EA6D2]
+                  hover:shadow-lg
+                  hover:-translate-y-1
+                  /* Estilos focus */
+                  focus:border-[#3EA6D2]
+                  focus:shadow-lg
+                  focus:-translate-y-1
+                  /* Estilos active */
+                  active:border-[#3EA6D2]
+                  active:shadow-lg
+                  active:-translate-y-1
                 "
               >
                 {/* Imagen */}
@@ -68,7 +86,7 @@ export function ServiceSection({ data }: { data: ServicesSectionBlock }) {
                 )}
 
                 {/* Título */}
-                <h3 className="mt-4 mb-3 text-xl font-bold text-gray-800 text-center">
+                <h3 className="mt-4 mb-3 text-xl font-bold text-[#3EA6D2] text-center">
                   {service.heading}
                 </h3>
 
@@ -87,8 +105,7 @@ export function ServiceSection({ data }: { data: ServicesSectionBlock }) {
                       block mx-auto text-white
                       bg-[#3EA6D2] hover:bg-[#B4000A]
                       px-6 py-2 rounded-full text-center
-                      transition-colors duration-300
-                    "
+                      transition-colors duration-300"
                   >
                     Ver más
                   </a>

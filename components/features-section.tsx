@@ -1,11 +1,22 @@
 "use client";
+import { useState, useEffect } from "react";
 
-import { useState } from "react";
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768); // Puedes ajustar el breakpoint si lo deseas
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  return isMobile;
+}
 
-// Cambia el color del ícono al hacer hover.
-function getIcon(name: string, isHovered: boolean) {
-  // Si el usuario pasa el cursor, el ícono se vuelve rojo (#B4000A)
-  const iconColor = isHovered ? "#B4000A" : "currentColor";
+function getIcon(name: string, isActive: boolean) {
+  // En estado normal, el ícono usa el celeste (#3EA6D2); en estado activo (touch), se vuelve rojo fuerte (#B4000A)
+  const iconColor = isActive ? "#B4000A" : "#3EA6D2";
   switch (name) {
     case "MISION_ICON":
       return <MissionIcon className="w-12 h-12" stroke={iconColor} />;
@@ -33,89 +44,102 @@ interface FeatureSectionProps {
   feature: FeatureProps[];
 }
 
-// Controla los bordes de cada columna
 function getBorderClasses(index: number, total: number) {
   if (index === 0) {
-    return `
-      rounded-l-xl
-      border-l border-t border-b border-r-0
-    `;
+    return "rounded-l-xl border-l border-t border-b border-r-0";
   } else if (index === total - 1) {
-    return `
-      rounded-r-xl
-      border-r border-t border-b border-l-0
-    `;
+    return "rounded-r-xl border-r border-t border-b border-l-0";
   } else {
-    return `
-      border-t border-b
-      border-l-0 border-r-0
-    `;
+    return "border-t border-b border-l-0 border-r-0";
   }
+}
+
+// Componente para cada tarjeta de característica
+function FeatureCard({
+  feature,
+  index,
+  totalFeatures,
+}: {
+  feature: FeatureProps;
+  index: number;
+  totalFeatures: number;
+}) {
+  const isMobile = useIsMobile();
+  const [isActive, setIsActive] = useState(false);
+
+  // En desktop se usan los eventos hover (ya definidos en CSS) y en móvil activamos los eventos touch
+  const handleTouchStart = () => {
+    if (isMobile) setIsActive(true);
+  };
+  const handleTouchEnd = () => {
+    if (isMobile) setIsActive(false);
+  };
+
+  return (
+    <div
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      // Puedes dejar los eventos de mouse para que en escritorio el hover siga funcionando
+      onMouseEnter={() => setIsActive(true)}
+      onMouseLeave={() => setIsActive(false)}
+      className={`
+        group
+        pt-12 p-6
+        flex flex-col items-start text-left
+        ${index === 1 ? "bg-[#3EA6D2]/10" : "bg-white"}
+        shadow-md hover:shadow-lg
+        hover:-translate-y-1
+        transition-all duration-300
+        ${getBorderClasses(index, totalFeatures)}
+        border border-transparent hover:border-[#B4000A]
+        hover:rounded-xl
+      `}
+    >
+      {getIcon(feature.icon, isActive)}
+      <h2 className="mt-4 mb-2 text-2xl md:text-4xl font-bold text-[#3EA6D2]">
+        {feature.heading}
+      </h2>
+      <p className="text-gray-600 text-sm text-justify leading-relaxed">
+        {feature.subHeading}
+      </p>
+    </div>
+  );
 }
 
 export function FeatureSection({ data }: { readonly data: FeatureSectionProps }) {
   return (
     <div className="container mx-auto px-4 py-6 md:px-35 lg:py-12">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center mb-12">
-        {/* Columna Izquierda */}
+      {/* Título y descripción principal */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 items-center mb-12">
         <div>
-          <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mb-4 md:mb-20">
+          <h2 className="text-2xl md:text-4xl font-bold text-[#3EA6D2] mb-4 md:mb-20">
             {data.title}
           </h2>
         </div>
-        {/* Columna Derecha */}
         <div>
-          <p className="text-gray-500 text-justify text-sm leading-relaxed">
+          <p className="text-gray-600 text-sm text-justify leading-relaxed">
             {data.description}
           </p>
         </div>
       </div>
 
-      {/* 1 columna en móvil y 3 en pantallas medianas */}
+      {/* Tarjetas de características sin separación (gap-0) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
-        {data.feature.map((feature, index) => {
-          const [isHovered, setIsHovered] = useState(false);
-          const totalFeatures = data.feature.length;
-
-          return (
-            <div
-              key={feature.id}
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-              className={`
-                group
-                pt-12 p-8
-                flex flex-col
-                items-start text-left
-                shadow-md
-                transition-all duration-300
-                hover:shadow-lg hover:border-[#B4000A]
-                ${index === 1 ? "bg-[#3EA6D2]/10" : "bg-white"}
-                ${getBorderClasses(index, totalFeatures)}
-                border-gray-200
-              `}
-            >
-              {/* Ícono dinámico */}
-              {getIcon(feature.icon, isHovered)}
-
-              <h2 className="mt-4 mb-3 text-xl font-bold text-gray-800">
-                {feature.heading}
-              </h2>
-
-              <p className="text-gray-500 text-justify text-sm leading-relaxed">
-                {feature.subHeading}
-              </p>
-            </div>
-          );
-        })}
+        {data.feature.map((feature, index) => (
+          <FeatureCard
+            key={feature.id}
+            feature={feature}
+            index={index}
+            totalFeatures={data.feature.length}
+          />
+        ))}
       </div>
     </div>
   );
 }
 
-/* Íconos representativos de cada tema */
+/* Íconos representativos */
 function MissionIcon(props: any) {
-  // Ícono "bandera" (flag) para Misión
   return (
     <svg
       {...props}
@@ -132,7 +156,6 @@ function MissionIcon(props: any) {
 }
 
 function ValuesIcon(props: any) {
-  // Ícono "handshake" para Valores
   return (
     <svg
       {...props}
@@ -153,7 +176,6 @@ function ValuesIcon(props: any) {
 }
 
 function VisionIcon(props: any) {
-  // Ícono "ojo" (eye) para Visión
   return (
     <svg
       {...props}

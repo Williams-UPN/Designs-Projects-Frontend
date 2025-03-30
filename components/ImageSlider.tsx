@@ -54,7 +54,8 @@ export default function ImageSlider({ slides, globalSubheading }: ImageSliderPro
         ))}
       </Swiper>
 
-      {/* Texto superpuesto sobre la imagen */}
+
+      {/* Ejemplo, Texto superpuesto sobre la imagen
       <div
         className={`
           absolute
@@ -74,7 +75,7 @@ export default function ImageSlider({ slides, globalSubheading }: ImageSliderPro
         `}
       >
         {finalSubheading}
-      </div>
+      </div> */}
 
       {/* Flechas de navegación con tamaños diferentes en móvil/escritorio */}
       <div className="swiper-button-prev !text-white !w-8 !h-8 sm:!w-12 sm:!h-12 !bg-black/30 !rounded-full hover:!bg-black/50 transition-all" />
