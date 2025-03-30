@@ -39,36 +39,45 @@ export function Footer({ data, imageIco }: Readonly<FooterProps>) {
 
   const { text, socialLink, address, linkAddress } = data;
 
+  // Instagram
   const instagram = socialLink?.find((link) =>
     link.text.toLowerCase().includes("instagram") ||
     link.url.toLowerCase().includes("instagram")
   );
 
+  // Facebook
   const facebook = socialLink?.find((link) =>
     link.text.toLowerCase().includes("facebook") ||
     link.url.toLowerCase().includes("facebook")
   );
 
+  // YouTube
   const youtube = socialLink?.find((link) =>
     link.text.toLowerCase().includes("youtube") ||
     link.url.toLowerCase().includes("youtube")
   );
 
+  // WhatsApp
   const whatsapp = socialLink?.find((link) =>
     link.text.toLowerCase().includes("whatsapp") ||
     link.url.toLowerCase().includes("whatsapp") ||
     link.url.toLowerCase().includes("wa.me")
   );
 
-  // Extraer solo los últimos 9 dígitos del número de WhatsApp
+  // Extraemos sólo los últimos 9 dígitos del número de WhatsApp
   let lastNineDigits = "";
   if (whatsapp) {
     const onlyDigits = whatsapp.url.replace(/\D+/g, "");
     lastNineDigits = onlyDigits.slice(-9);
   }
 
-  // Correo fijo
-  const email = "construingenio18@gmail.com";
+  // Correo: texto "correo" o que contenga "@" (pero que no sea YouTube)
+  const emailLink = socialLink?.find((link) =>
+    link.text.toLowerCase().includes("correo") ||
+    (link.url.includes("@") && !link.url.toLowerCase().includes("youtube.com/@") && !link.url.toLowerCase().includes("tiktok.com/@"))
+
+
+  );
 
   return (
     <footer className={`${inter.className} bg-[#3EA6D2]/55 text-base text-white`}>
@@ -123,6 +132,7 @@ export function Footer({ data, imageIco }: Readonly<FooterProps>) {
 
           {/* Columna Derecha: Dirección, Correo y WhatsApp */}
           <div className="mt-6 md:mt-0 flex flex-col items-start space-y-6">
+            {/* Dirección */}
             {address && linkAddress && (
               <Link
                 href={linkAddress}
@@ -130,31 +140,25 @@ export function Footer({ data, imageIco }: Readonly<FooterProps>) {
                 rel="noopener noreferrer"
                 className="group flex items-center space-x-2 text-white transition-colors hover:text-[#B4000A]"
               >
-                {/* Animación de mapa */}
-                <Lottie
-                  animationData={mapsAnimation}
-                  loop={true}
-                  className="w-8 h-8"
-                />
+                <Lottie animationData={mapsAnimation} loop={true} className="w-8 h-8" />
                 <span className="text-left">{address}</span>
               </Link>
             )}
 
-            {/* Bloque de correo */}
-            <div className="flex items-center space-x-2">
-              <Link
-                href={`mailto:${email}`}
-                className="group flex items-center space-x-2 text-white transition-colors hover:text-[#B4000A]"
-              >
-                <Lottie
-                  animationData={mailAnimation}
-                  loop={true}
-                  className="w-8 h-8"
-                />
-                <span>{email}</span>
-              </Link>
-            </div>
+            {/* Correo traído de Strapi */}
+            {emailLink && (
+              <div className="flex items-center space-x-2">
+                <Link
+                  href={`mailto:${emailLink.url}`}
+                  className="group flex items-center space-x-2 text-white transition-colors hover:text-[#B4000A]"
+                >
+                  <Lottie animationData={mailAnimation} loop={true} className="w-8 h-8" />
+                  <span>{emailLink.url}</span>
+                </Link>
+              </div>
+            )}
 
+            {/* WhatsApp */}
             {whatsapp && lastNineDigits && (
               <div className="flex items-center space-x-2">
                 <Link
@@ -163,12 +167,7 @@ export function Footer({ data, imageIco }: Readonly<FooterProps>) {
                   rel={whatsapp.isExternal ? "noopener noreferrer" : undefined}
                   className="group flex items-center space-x-2 text-white transition-colors hover:text-[#B4000A]"
                 >
-                  {/* Animación de WhatsApp */}
-                  <Lottie
-                    animationData={whatsappAnimation}
-                    loop={true}
-                    className="w-8 h-8"
-                  />
+                  <Lottie animationData={whatsappAnimation} loop={true} className="w-8 h-8" />
                   <span>{lastNineDigits}</span>
                 </Link>
               </div>
