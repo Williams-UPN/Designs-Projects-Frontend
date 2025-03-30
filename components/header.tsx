@@ -104,7 +104,7 @@ export function Header({ data, imageIco }: HeaderProps) {
                   hover:bg-[#B4000A]/90
                 "
               >
-                {ctaButton?.text || "Sign in"}
+                {ctaButton?.text}
               </Button>
             </Link>
           </div>

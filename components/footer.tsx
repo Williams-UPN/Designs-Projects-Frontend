@@ -4,12 +4,6 @@ import { Logo } from "@/components/logo";
 import { inter } from "@/config/fonts";
 import { FaInstagram, FaMapMarkerAlt, FaWhatsapp } from "react-icons/fa";
 
-type LogoText = {
-  id: number;
-  text: string;
-  url: string;
-};
-
 interface GlobalImageIco {
   id?: number;
   url: string;
@@ -25,9 +19,10 @@ interface SocialLink {
 
 interface FooterProps {
   data: {
-    logoText: LogoText | LogoText[];
     text: string;
     socialLink?: SocialLink[];
+    address?: string;
+    linkAddress?: string;
   };
   imageIco?: GlobalImageIco;
 }
@@ -38,10 +33,8 @@ export function Footer({ data, imageIco }: Readonly<FooterProps>) {
     return null;
   }
 
-  const { logoText, text, socialLink } = data;
-  const singleLogoText = Array.isArray(logoText) ? logoText[0] : logoText;
+  const { text, socialLink, address, linkAddress } = data;
 
-  // Redes sociales específicas
   const instagram = socialLink?.find((link) =>
     link.text.toLowerCase().includes("instagram") ||
     link.url.toLowerCase().includes("instagram")
@@ -52,18 +45,20 @@ export function Footer({ data, imageIco }: Readonly<FooterProps>) {
     link.url.toLowerCase().includes("wa.me")
   );
 
+  // Extraer solo los últimos 9 dígitos del número de teléfono en el link de WhatsApp
+  let lastNineDigits = "";
+  if (whatsapp) {
+    const onlyDigits = whatsapp.url.replace(/\D+/g, "");
+    lastNineDigits = onlyDigits.slice(-9);
+  }
+
   return (
-    <footer className={`${inter.className} bg-white text-base`}>
+    <footer className={`${inter.className} bg-[#3EA6D2]/55 text-base text-white`}>
       <div className="container mx-auto px-6 md:px-40 py-6">
-        {/* Sección Superior: Dos columnas */}
         <div className="flex flex-col md:flex-row items-center justify-between">
           {/* Columna Izquierda: Logo e Instagram */}
           <div className="flex flex-col items-center space-y-4 md:items-start">
-            <Logo
-              dark
-              text={singleLogoText?.text || "Construingenio"}
-              image={imageIco}
-            />
+            <Logo dark text="" image={imageIco} />
             {instagram && (
               <div className="flex items-center space-x-2">
                 <Link
@@ -72,7 +67,7 @@ export function Footer({ data, imageIco }: Readonly<FooterProps>) {
                   rel={instagram.isExternal ? "noopener noreferrer" : undefined}
                   className="
                     flex items-center space-x-2
-                    text-gray-800
+                    text-white
                     hover:text-[#B4000A]
                     transition-colors
                   "
@@ -85,25 +80,25 @@ export function Footer({ data, imageIco }: Readonly<FooterProps>) {
           </div>
 
           {/* Columna Derecha: Dirección y WhatsApp */}
-          <div className="mt-6 md:mt-0 flex flex-col items-start space-y-2">
-            {/* Dirección con Link a Maps */}
-            <Link
-              href="https://maps.app.goo.gl/jULwTjdwhwfkq7D46"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="
-                flex items-center space-x-2
-                text-gray-800
-                hover:text-[#B4000A]
-                transition-colors
-              "
-            >
-              <FaMapMarkerAlt className="w-5 h-5" />
-              <span className="text-left">
-                {" Cal. San Borja Mza. G Lote. 15 P.J. San Borja, Pomalca, Chiclayo, Lambayeque, Perú "}
-              </span>
-            </Link>
-            {whatsapp && (
+          <div className="mt-6 md:mt-0 flex flex-col items-start space-y-6">
+            {address && linkAddress && (
+              <Link
+                href={linkAddress}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  flex items-center space-x-2
+                  text-white
+                  hover:text-[#B4000A]
+                  transition-colors
+                "
+              >
+                <FaMapMarkerAlt className="w-5 h-5" />
+                <span className="text-left">{address}</span>
+              </Link>
+            )}
+
+            {whatsapp && lastNineDigits && (
               <div className="flex items-center space-x-2">
                 <Link
                   href={whatsapp.url}
@@ -111,13 +106,13 @@ export function Footer({ data, imageIco }: Readonly<FooterProps>) {
                   rel={whatsapp.isExternal ? "noopener noreferrer" : undefined}
                   className="
                     flex items-center space-x-2
-                    text-gray-800
+                    text-white
                     hover:text-[#B4000A]
                     transition-colors
                   "
                 >
                   <FaWhatsapp className="w-5 h-5" />
-                  <span> {" 956 498 610"}</span>
+                  <span>{lastNineDigits}</span>
                 </Link>
               </div>
             )}
@@ -125,8 +120,8 @@ export function Footer({ data, imageIco }: Readonly<FooterProps>) {
         </div>
 
         {/* Sección Inferior */}
-        <div className="text-center py-6 text-gray-800 border-t border-gray-200 mt-4">
-          {text || "© 2025 - Construingenio. Todos los derechos reservados."}
+        <div className="text-center py-8 text-white border-t border-white mt-4">
+          {text}
         </div>
       </div>
     </footer>

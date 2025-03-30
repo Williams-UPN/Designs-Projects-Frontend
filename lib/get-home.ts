@@ -38,7 +38,7 @@ const homePageQuery = qs.stringify(
       blocks: {
         on: {
           "layaout.seo": {
-            populate: "*", // Pobla todos los campos del bloque SEO
+            populate: "*",
           },
           "layaout.header": {
             populate: {
@@ -50,6 +50,7 @@ const homePageQuery = qs.stringify(
             },
           },
           "layaout.features-section": {
+            fields: ["title", "description"],
             populate: {
               feature: {
                 populate: true,
@@ -57,7 +58,16 @@ const homePageQuery = qs.stringify(
             },
           },
           "layaout.services-section": {
+            fields: ["mainHeading"],
             populate: {
+              linkCompleteService: {
+                fields: ["heading", "subHeading"],
+                populate: "*",
+                sort: "heading:asc",
+              },
+              imageService: {
+                fields: ["url", "alternativeText"],
+              },
               link: {
                 populate: {
                   image: {
@@ -68,8 +78,8 @@ const homePageQuery = qs.stringify(
             },
           },
           "layaout.footer": {
+            fields: ["text", "address", "linkAddress"],
             populate: {
-              logoText: true,
               socialLink: true,
             },
           },
@@ -79,6 +89,7 @@ const homePageQuery = qs.stringify(
   },
   { encodeValuesOnly: true }
 );
+
 
 // -------------------------------------------------------------------------
 // Obtiene los datos de la página "home" (con todos los bloques: SEO, header, features, services, footer)
@@ -122,7 +133,7 @@ export async function getGlobalMetadata() {
 // Obtiene los datos de slides
 export async function getSliderData() {
   noStore();
-  
+
   const query = qs.stringify(
     {
       populate: {
