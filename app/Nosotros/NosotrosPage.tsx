@@ -1,5 +1,3 @@
-// app/nosotros/NosotrosPage.tsx
-
 import { getHomeData } from "@/lib/get-home";
 import { getStrapiMedia } from "@/lib/utils";
 
