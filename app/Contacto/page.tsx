@@ -15,10 +15,10 @@ export default async function Page() {
     (block: any) => block.__component === "layaout.services-section"
   );
   
-  // Combinar ambos: usamos la data del footer y agregamos la propiedad imageService
+  // Combinar ambos: usamos la data del footer y agregamos la propiedad imageContact
   const data = {
     ...footerData,
-    imageService: servicesBlock?.imageService || null,
+    imageContact: servicesBlock?.imageContact || null,
   };
 
   return <ContactoPage data={data || {}} />;
