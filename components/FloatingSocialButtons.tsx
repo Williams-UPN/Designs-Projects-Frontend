@@ -77,10 +77,10 @@ export function FloatingSocialButtons({ socialLink }: { socialLink: SocialLink[]
               <Link
                 key={link.id}
                 href={
-                  // Si es correo, forzamos "mailto:" si no está presente
-                  link.url.includes("@") && !link.url.startsWith("mailto:")
+                  isValidEmail(link.url) && !link.url.startsWith("mailto:")
                     ? `mailto:${link.url}`
-                    : link.url}
+                    : link.url
+                }
                 target={link.isExternal ? "_blank" : "_self"}
                 rel={link.isExternal ? "noopener noreferrer" : undefined}
                 className={`
@@ -119,3 +119,9 @@ export function FloatingSocialButtons({ socialLink }: { socialLink: SocialLink[]
     </div>
   );
 }
+
+function isValidEmail(url: string): boolean {
+  // Esta expresión regular es sencilla y valida un formato básico de email.
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(url);
+}
+

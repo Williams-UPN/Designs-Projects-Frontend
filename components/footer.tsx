@@ -81,7 +81,7 @@ export function Footer({ data, imageIco }: Readonly<FooterProps>) {
 
   return (
     <footer className={`${inter.className} bg-[#3EA6D2]/55 text-base text-white`}>
-      <div className="container mx-auto px-6 md:px-40 py-6">
+      <div className="container mx-auto px-6 md:px-35 py-6">
         <div className="flex flex-col md:flex-row items-center justify-between">
           {/* Columna Izquierda: Logo e íconos de redes sociales */}
           <div className="flex flex-col items-center space-y-4 md:items-start">
