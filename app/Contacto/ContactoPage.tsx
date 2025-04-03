@@ -16,7 +16,7 @@ interface ContactPageData {
   address?: string;
   linkAddress?: string;
   text?: string;
-  imageService?: {
+  imageContact?: {
     url?: string;
     data?: {
       attributes?: {
@@ -31,7 +31,7 @@ interface ContactoPageProps {
 }
 
 export default function ContactoPage({ data = {} }: ContactoPageProps) {
-  const { socialLink, address, linkAddress, imageService } = data;
+  const { socialLink, address, linkAddress, imageContact } = data;
 
   // Usamos el enlace de WhatsApp para obtener el teléfono
   const phoneLink = socialLink?.find((link) =>
@@ -73,8 +73,8 @@ export default function ContactoPage({ data = {} }: ContactoPageProps) {
 
   return (
     <>
-      {/* Hero: usamos la misma lógica que en Nosotros para obtener la imagen */}
-      <ImageMainService imageMain={imageService} />
+      {/* Hero: usamos la imagen extraída de imageContact */}
+      <ImageMainService imageMain={imageContact} />
 
       {/* Sección de Medios de contacto + Formulario */}
       <section className="bg-white py-10">
@@ -260,12 +260,12 @@ export default function ContactoPage({ data = {} }: ContactoPageProps) {
             />
           </div>
         </div>
-      </section >
+      </section>
     </>
   );
 }
 
-/** Hero Section similar a la de "Nosotros" que usa imageService */
+/** Hero Section que usa imageContact */
 function ImageMainService({ imageMain }: { imageMain: any }) {
   const title = "Contacto";
   // Extraemos la URL de la imagen desde imageMain
@@ -291,3 +291,4 @@ function ImageMainService({ imageMain }: { imageMain: any }) {
     </section>
   );
 }
+

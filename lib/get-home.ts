@@ -68,6 +68,12 @@ const homePageQuery = qs.stringify(
               imageService: {
                 fields: ["url", "alternativeText"],
               },
+              imageProject: {
+                fields: ["url", "alternativeText"],
+              },
+              imageContact: {    // Agregamos este objeto
+                fields: ["url", "alternativeText"],
+              },
               link: {
                 populate: {
                   image: {
