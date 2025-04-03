@@ -2,11 +2,7 @@
 import { useState } from "react";
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaInstagram } from "react-icons/fa";
 import Link from "next/link";
-import Lottie from "lottie-react";
 import { getStrapiMedia } from "@/lib/utils";
-import whatsappAnimation from "@/public/animations/whatsapp.json";
-import mapsAnimation from "@/public/animations/maps.json";
-import mailAnimation from "@/public/animations/mail.json";
 
 interface SocialLink {
   id: number;
@@ -20,7 +16,6 @@ interface ContactPageData {
   address?: string;
   linkAddress?: string;
   text?: string;
-  // Aquí se espera la imagen para el Hero, similar a Nosotros
   imageService?: {
     url?: string;
     data?: {
@@ -57,7 +52,7 @@ export default function ContactoPage({ data = {} }: ContactoPageProps) {
       !link.url.toLowerCase().includes("youtube.com/@") &&
       !link.url.toLowerCase().includes("tiktok.com/@"))
   );
-  
+
   // Instagram
   const instagramLink = socialLink?.find((link) =>
     link.text.toLowerCase().includes("instagram") ||
@@ -107,7 +102,7 @@ export default function ContactoPage({ data = {} }: ContactoPageProps) {
                       <FaPhoneAlt className="w-4 h-4" />
                     </div>
                     <div className="text-gray-700 text-sm md:text-base leading-relaxed transition-colors duration-300 group-hover:text-[#B4000A]">
-                      <p>+{lastNineDigits}</p>
+                      <p>{lastNineDigits}</p>
                     </div>
                   </Link>
                 )}
@@ -152,7 +147,7 @@ export default function ContactoPage({ data = {} }: ContactoPageProps) {
                       <FaInstagram className="w-4 h-4" />
                     </div>
                     <div className="text-gray-700 text-sm md:text-base leading-relaxed transition-colors duration-300 group-hover:text-[#B4000A]">
-                      <p>Seguinos en Instagram</p>
+                      <p>Síguenos en Instagram</p>
                     </div>
                   </Link>
                 )}
@@ -249,13 +244,14 @@ export default function ContactoPage({ data = {} }: ContactoPageProps) {
         </div>
       </section>
 
+      {/* Mapa: usando aspect ratio para que sea responsivo */}
       <section className="pb-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="w-full h-[400px] overflow-hidden rounded-lg shadow-md">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1981.0020156728817!2d-79.7705226!3d-6.769361!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x904ce9004c71c085%3A0xdabe349d21c39a61!2sPomalca%2C%20Chiclayo%2C%20Per%C3%BA!5e0!3m2!1ses!2spe!4v1743378799257!5m2!1ses!2spe"
-              title="Pomalca, Chiclayo, Perú"
-              aria-label="Pomalca, Chiclayo, Perú"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1665.8023061310319!2d-79.83946481133675!3d-6.773760339508596!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x904cef28567ae461%3A0xfae5cd2e0e823270!2sTorres%20Paz%20708%2C%20Chiclayo%2014001!5e0!3m2!1ses!2spe!4v1743686834202!5m2!1ses!2spe"
+              title="Torres Paz 708, Chiclayo"
+              aria-label="Torres Paz 708, Chiclayo"
               className="w-full h-full"
               style={{ border: 0 }}
               loading="lazy"
@@ -264,7 +260,7 @@ export default function ContactoPage({ data = {} }: ContactoPageProps) {
             />
           </div>
         </div>
-      </section>
+      </section >
     </>
   );
 }
@@ -281,7 +277,7 @@ function ImageMainService({ imageMain }: { imageMain: any }) {
 
   return (
     <section
-      className="relative w-full h-[500px] flex items-center justify-center"
+      className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] flex items-center justify-center"
       style={{
         backgroundImage: `url('${fullImageUrl}')`,
         backgroundSize: "cover",
@@ -289,7 +285,7 @@ function ImageMainService({ imageMain }: { imageMain: any }) {
       }}
     >
       <div className="absolute inset-0 bg-[#3EA6D2]/30" />
-      <h1 className="text-4xl md:text-6xl text-white font-bold z-10">
+      <h1 className="text-3xl sm:text-4xl md:text-6xl text-white font-bold z-10">
         {title}
       </h1>
     </section>
