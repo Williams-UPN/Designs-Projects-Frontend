@@ -4,18 +4,14 @@ import { ServiceSection } from "@/components/service-section";
 import ImageSlider from "@/components/ImageSlider";
 
 export default async function Home() {
- 
   const [homeData, sliderData] = await Promise.all([
     getHomeData(),
     getSliderData(),
   ]);
 
-
-  const subheading = homeData.subHeading || "Texto predeterminado";
-
   return (
     <main>
-      <ImageSlider slides={sliderData} globalSubheading={subheading} />
+      <ImageSlider slides={sliderData} />
       {homeData.blocks.map(blockRenderer)}
     </main>
   );

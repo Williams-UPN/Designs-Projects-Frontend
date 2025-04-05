@@ -1,6 +1,6 @@
 import { getHomeData } from "@/lib/get-home";
 import { getStrapiMedia } from "@/lib/utils";
-import Image from "next/image";
+import ProjectsGrid from "./ProjectsGrid"; // Componente cliente
 
 export async function ProyectoPage() {
   const homeData = await getHomeData();
@@ -10,15 +10,15 @@ export async function ProyectoPage() {
     (block: any) => block.__component === "layaout.services-section"
   );
 
-  // Arreglo de imágenes locales para el grid: 10 imágenes (2 filas de 5 columnas)
-  const projectImages = new Array(8).fill("/2.jpg");
+  // Arreglo de imágenes locales para el grid: 8 imágenes de ejemplo
+  const projectImages = new Array(6).fill("/2.jpg");
 
   return (
     <>
       {/* Hero: muestra la imagen de fondo proveniente de imageProject */}
       <ImageMainService imageMain={servicesBlock} />
 
-      {/* Sección de Proyectos con título, subtítulo y grid de imágenes */}
+      {/* Sección de Proyectos */}
       <section className="container mx-auto px-35 py-8">
         <header className="text-center mb-8">
           <h1 className="text-4xl md:text-6xl font-bold">Proyectos</h1>
@@ -26,27 +26,14 @@ export async function ProyectoPage() {
             Somos especialistas en pisos industriales
           </h2>
         </header>
-        {/* Grid de 5 columnas que generará 2 filas al tener 10 elementos */}
-        <div className="grid grid-cols-4 gap-4">
-          {projectImages.map((imgUrl, index) => (
-            <div key={index} className="relative overflow-hidden">
-              <Image
-                src={imgUrl}
-                alt={`Proyecto ${index + 1}`}
-                width={768}
-                height={379}
-                layout="responsive"
-                objectFit="cover"
-              />
-            </div>
-          ))}
-        </div>
+        {/* Grid interactivo: se delega a un componente cliente */}
+        <ProjectsGrid projectImages={projectImages} />
       </section>
     </>
   );
 }
 
-/** Hero Section que usa imageProject del bloque services-section */
+/** Componente Hero */
 function ImageMainService({ imageMain }: { imageMain: any }) {
   const title = "Proyectos";
   const relativeImageUrl =
