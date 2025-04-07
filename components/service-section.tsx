@@ -63,15 +63,15 @@ export function ServiceSection({ data }: { data: ServicesSectionBlock }) {
                   transition
                   duration-300
                   /* Estilos hover */
-                  hover:border-[#3EA6D2]
+                  hover:border-[#B4000A]
                   hover:shadow-lg
                   hover:-translate-y-1
                   /* Estilos focus */
-                  focus:border-[#3EA6D2]
+                  focus:border-[#B4000A]
                   focus:shadow-lg
                   focus:-translate-y-1
                   /* Estilos active */
-                  active:border-[#3EA6D2]
+                  active:border-[#B4000A]
                   active:shadow-lg
                   active:-translate-y-1
                 "
