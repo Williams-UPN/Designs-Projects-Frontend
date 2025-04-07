@@ -76,8 +76,8 @@ export default function ProjectsGrid({ projectImages }: ProjectsGridProps) {
               alt={project.heading}
               width={768}
               height={379}
-              className="w-full h-[250px] object-cover"
-            />
+              className="w-full h-[350px] object-contain bg-white"
+              />
           </div>
         ))}
       </div>
@@ -91,7 +91,7 @@ export default function ProjectsGrid({ projectImages }: ProjectsGridProps) {
           style={{ backgroundColor: "rgba(0, 0, 0, 0.3)" }}
         >
           <div
-            className="relative bg-white p-8 rounded-lg shadow-2xl w-full max-w-5xl h-[80vh] flex transition-transform duration-800"
+            className="relative bg-white p-8 rounded-lg shadow-2xl w-full max-w-[85vw] h-[85vh] flex transition-transform duration-800"
             onClick={(e) => e.stopPropagation()}
             style={{
               transform: animateModal ? "translateY(0)" : "translateY(-100vh)",
@@ -108,27 +108,29 @@ export default function ProjectsGrid({ projectImages }: ProjectsGridProps) {
             </div>
 
             {/* Slider de imágenes */}
-            <div className="w-1/2 relative flex items-center justify-center">
+            <div className="w-[60%] h-full relative flex items-center justify-center">
               <button
                 onClick={prevSlide}
-                className="absolute left-2 bg-gray-200 p-2 rounded-full hover:bg-gray-300"
+                className="absolute left-2 bg-gray-200 p-2 rounded-full hover:bg-gray-300 z-10"
               >
                 &lt;
               </button>
               <Image
                 src={gallery[galleryIndex]}
                 alt={`${currentProject.heading} - Imagen ${galleryIndex + 1}`}
-                width={500}
-                height={400}
-                className="rounded-lg object-cover"
+                width={700}
+                height={500}
+                className="rounded-lg object-contain w-full h-full"
               />
               <button
                 onClick={nextSlide}
-                className="absolute right-2 bg-gray-200 p-2 rounded-full hover:bg-gray-300"
+                className="absolute right-2 bg-gray-200 p-2 rounded-full hover:bg-gray-300 z-10"
               >
                 &gt;
               </button>
             </div>
+
+
 
             {/* Botón cerrar */}
             <button
