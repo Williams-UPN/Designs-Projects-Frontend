@@ -30,7 +30,7 @@ export async function NosotrosPage() {
               </h2>
             </div>
             <div>
-              <p className="text-gray-500 text-sm text-justify leading-relaxed">
+              <p className="text-gray-500 max-w-xl text-sm md:text-base text-justify leading-relaxed">
                 {featuresBlock.description}
               </p>
             </div>
@@ -91,7 +91,7 @@ export async function NosotrosPage() {
                 <h2 className="text-2xl md:text-4xl font-bold text-[#3EA6D2] mb-4">
                   {item.heading}
                 </h2>
-                <p className="text-gray-500 text-sm text-justify leading-relaxed">
+                <p className="text-gray-500 max-w-xl text-sm md:text-base text-justify leading-relaxed">
                   {item.subHeading}
                 </p>
               </div>

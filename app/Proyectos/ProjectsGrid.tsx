@@ -2,25 +2,31 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
+interface ProjectItem {
+  imageUrl: string;
+  heading: string;
+  subHeading: string;
+  gallery: string[];
+}
+
 interface ProjectsGridProps {
-  projectImages: string[];
+  projectImages: ProjectItem[];
 }
 
 export default function ProjectsGrid({ projectImages }: ProjectsGridProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [animateModal, setAnimateModal] = useState(false);
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [selectedProjectIndex, setSelectedProjectIndex] = useState(0);
+  const [galleryIndex, setGalleryIndex] = useState(0);
 
-  // Abre el modal y configura la imagen inicial del slider
   const openModal = (index: number) => {
-    setCurrentSlide(index);
+    setSelectedProjectIndex(index);
+    setGalleryIndex(0);
     setModalOpen(true);
   };
 
-  // Cuando modalOpen cambia a true, inicia la animación (efecto "elevarse")
   useEffect(() => {
     if (modalOpen) {
-      // Pequeño delay para que el modal ya esté montado y se inicie la animación
       const timer = setTimeout(() => setAnimateModal(true), 50);
       return () => clearTimeout(timer);
     } else {
@@ -28,68 +34,80 @@ export default function ProjectsGrid({ projectImages }: ProjectsGridProps) {
     }
   }, [modalOpen]);
 
-  // Función para cerrar el modal con animación inversa
   const closeModal = () => {
-    // Inicia la animación de salida
     setAnimateModal(false);
-    // Espera a que termine la transición para desmontar el modal (800ms)
     setTimeout(() => setModalOpen(false), 800);
   };
 
-  // Avanza al siguiente slide
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % projectImages.length);
+    const gallery = getGallery();
+    setGalleryIndex((prev) => (prev + 1) % gallery.length);
   };
 
-  // Retrocede al slide anterior
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + projectImages.length) % projectImages.length);
+    const gallery = getGallery();
+    setGalleryIndex((prev) => (prev - 1 + gallery.length) % gallery.length);
   };
+
+  const getGallery = () => {
+    const project = projectImages[selectedProjectIndex];
+    return project.gallery?.length ? project.gallery : [project.imageUrl];
+  };
+
+  const currentProject = projectImages[selectedProjectIndex];
+  const gallery = getGallery();
 
   return (
     <>
-      {/* Grid de imágenes */}
-      <div className="grid grid-cols-3 gap-4">
-        {projectImages.map((imgUrl, index) => (
+      <div className="flex flex-wrap justify-center items-stretch gap-6">
+        {projectImages.map((project, index) => (
           <div
             key={index}
-            className="relative overflow-hidden cursor-pointer"
+            className="
+        w-full sm:w-1/2 lg:w-1/3 max-w-sm
+        bg-white rounded-xl shadow-md hover:shadow-lg transition-transform
+        hover:-translate-y-1 cursor-pointer overflow-hidden border border-transparent
+        hover:border-[#3EA6D2] hover:rounded-xl
+      "
             onClick={() => openModal(index)}
           >
             <Image
-              src={imgUrl}
-              alt={`Proyecto ${index + 1}`}
+              src={project.imageUrl}
+              alt={project.heading}
               width={768}
               height={379}
-              style={{ objectFit: "cover" }}
+              className="w-full h-[250px] object-cover"
             />
           </div>
         ))}
       </div>
 
-      {/* Modal: se muestra cuando modalOpen es true */}
+
+      {/* Modal */}
       {modalOpen && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50 transition-opacity duration-600"
           onClick={closeModal}
-          style={{ backgroundColor: "rgba(0, 0, 0, 0.3)" }} // Overlay translúcido
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.3)" }}
         >
-          {/* Contenedor del modal con animación de entrada/salida */}
           <div
             className="relative bg-white p-8 rounded-lg shadow-2xl w-full max-w-5xl h-[80vh] flex transition-transform duration-800"
-            onClick={(e) => e.stopPropagation()} // Evita cierre al hacer clic dentro
+            onClick={(e) => e.stopPropagation()}
             style={{
               transform: animateModal ? "translateY(0)" : "translateY(-100vh)",
             }}
           >
-            {/* Sección de texto (lado izquierdo) */}
+            {/* Texto del proyecto */}
             <div className="w-1/2 flex flex-col items-center justify-center px-8">
-              <h2 className="text-4xl font-bold mb-4">Proyectos</h2>
-              <p className="text-xl text-gray-600 text-center">
-                Somos especialistas en pisos industriales
+              <h2 className="text-2xl md:text-4xl font-bold text-[#3EA6D2] mb-4 text-center">
+                {currentProject.heading}
+              </h2>
+              <p className="text-gray-500 max-w-xl text-sm md:text-base text-justify leading-relaxed">
+                {currentProject.subHeading}
               </p>
             </div>
-            {/* Sección del slider (lado derecho) */}
+
+            {/* Slider de imágenes */}
             <div className="w-1/2 relative flex items-center justify-center">
               <button
                 onClick={prevSlide}
@@ -98,12 +116,11 @@ export default function ProjectsGrid({ projectImages }: ProjectsGridProps) {
                 &lt;
               </button>
               <Image
-                src={projectImages[currentSlide]}
-                alt={`Slide ${currentSlide + 1}`}
+                src={gallery[galleryIndex]}
+                alt={`${currentProject.heading} - Imagen ${galleryIndex + 1}`}
                 width={500}
                 height={400}
-                style={{ objectFit: "cover" }}
-                className="rounded-lg"
+                className="rounded-lg object-cover"
               />
               <button
                 onClick={nextSlide}
@@ -112,7 +129,8 @@ export default function ProjectsGrid({ projectImages }: ProjectsGridProps) {
                 &gt;
               </button>
             </div>
-            {/* Botón de cierre */}
+
+            {/* Botón cerrar */}
             <button
               className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
               onClick={closeModal}

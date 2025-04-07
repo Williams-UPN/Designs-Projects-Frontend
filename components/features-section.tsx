@@ -106,6 +106,8 @@ function FeatureCard({
   );
 }
 
+
+
 export function FeatureSection({ data }: { readonly data: FeatureSectionProps }) {
   return (
     <div className="container mx-auto px-4 py-6 md:px-35 lg:py-12">
