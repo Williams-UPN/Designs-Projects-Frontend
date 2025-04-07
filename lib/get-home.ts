@@ -83,6 +83,26 @@ const homePageQuery = qs.stringify(
               },
             },
           },
+          "layaout.projects": {
+            fields: ["heading", "subHeading"],
+            populate: {
+              link: {
+                fields: ["heading", "subHeading"],
+                populate: {
+                  imageProject: {
+                    fields: ["url", "alternativeText"],
+                  },
+                  linkGallery: {
+                    populate: {
+                      sliderImageProjects: {
+                        fields: ["url", "alternativeText"],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
           "layaout.footer": {
             fields: ["text", "address", "linkAddress"],
             populate: {
@@ -95,8 +115,6 @@ const homePageQuery = qs.stringify(
   },
   { encodeValuesOnly: true }
 );
-
-
 // -------------------------------------------------------------------------
 // Obtiene los datos de la página "home" (con todos los bloques: SEO, header, features, services, footer)
 export async function getHomeData() {
