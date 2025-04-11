@@ -12,13 +12,15 @@ const nextConfig = {
         protocol: "https",
         hostname: "placehold.co",
       },
+      {
+        // Agrega este bloque para tu Strapi en Render
+        protocol: "https",
+        hostname: "strapi-backend-hwpl.onrender.com",
+        port: "",            // deja vacío si no usas puerto explícito
+        pathname: "/uploads/**/*",
+      },
     ],
   },
 };
 
 export default nextConfig;
-
-
-
-
-

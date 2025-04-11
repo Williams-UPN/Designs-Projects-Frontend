@@ -199,7 +199,7 @@ export default function ContactoPage({ data = {} }: ContactoPageProps) {
                       className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#B4000A]"
                       value={whatsapp}
                       onChange={(e) => setWhatsapp(e.target.value)}
-                      placeholder="Ej: +54 9 11 1111-1111"
+                      placeholder="Ej: +51 999 999 999"
                     />
                   </div>
                   <div>

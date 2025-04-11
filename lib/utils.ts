@@ -46,11 +46,16 @@ export function flattenAttributes(data: any): any {
 }
 
 export function getStrapiURL() {
-  const baseUrl = process.env.STRAPI_HOST ?? "http://localhost:1337";
+  // NEXT_PUBLIC_STRAPI_HOST está disponible en el cliente y en el servidor
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_HOST
+    ?? "http://localhost:1337"; // fallback solo para desarrollo sin .env.local
+
+  // El token lo lees solo en el servidor (no expuesto al cliente)
   const token = process.env.STRAPI_TOKEN ?? "";
-  
+
   return { baseUrl, token };
 }
+
 
 export function getStrapiMedia(url: string | null) {
   if (url == null) return null;

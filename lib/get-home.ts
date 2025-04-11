@@ -30,8 +30,8 @@ async function fetchStrapi(path: string, queryString?: string) {
     throw error;
   }
 }
-
-// Query unificada para obtener todos los componentes en blocks: SEO, header, features, services y footer
+// -------------------------------------------------------------------------
+//
 const homePageQuery = qs.stringify(
   {
     populate: {
@@ -71,7 +71,7 @@ const homePageQuery = qs.stringify(
               imageProject: {
                 fields: ["url", "alternativeText"],
               },
-              imageContact: {    // Agregamos este objeto
+              imageContact: {   
                 fields: ["url", "alternativeText"],
               },
               link: {
@@ -116,7 +116,7 @@ const homePageQuery = qs.stringify(
   { encodeValuesOnly: true }
 );
 // -------------------------------------------------------------------------
-// Obtiene los datos de la página "home" (con todos los bloques: SEO, header, features, services, footer)
+// 
 export async function getHomeData() {
   noStore();
   const data = await fetchStrapi("/api/home");
@@ -134,8 +134,6 @@ export async function getHomeData() {
     subHeading, // "Donde cada detalle cuenta una historia"
   };
 }
-
-
 // -------------------------------------------------------------------------
 // Obtiene sólo metadatos (title, description) desde /api/home
 // En este caso, como home no tiene title/description a nivel root, extraemos del bloque SEO.

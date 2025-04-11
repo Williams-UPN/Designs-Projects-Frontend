@@ -59,29 +59,36 @@ export default function ProjectsGrid({ projectImages }: ProjectsGridProps) {
 
   return (
     <>
-      <div className="flex flex-wrap justify-center items-stretch gap-6">
+      {/* Grid de tarjetas: 1 col en xs, 2 en sm, 3 en md, 5 en lg+ */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {projectImages.map((project, index) => (
           <div
             key={index}
             className="
-        w-full sm:w-1/2 lg:w-1/3 max-w-sm
-        bg-white rounded-xl shadow-md hover:shadow-lg transition-transform
-        hover:-translate-y-1 cursor-pointer overflow-hidden border border-transparent
-        hover:border-[#3EA6D2] hover:rounded-xl
-      "
+              bg-white rounded-xl shadow-md hover:shadow-lg transition-transform
+              hover:-translate-y-1 cursor-pointer overflow-hidden border border-transparent
+              hover:border-[#3EA6D2] flex flex-col
+            "
             onClick={() => openModal(index)}
           >
-            <Image
-              src={project.imageUrl}
-              alt={project.heading}
-              width={768}
-              height={379}
-              className="w-full h-[350px] object-contain bg-white"
+            {/* Contenedor de imagen con relación de aspecto 4:3 */}
+            <div className="w-full aspect-[4/3] relative">
+              <Image
+                src={project.imageUrl}
+                alt={project.heading}
+                fill
+                className="object-cover"
               />
+            </div>
+
+            {/* Puedes añadir aquí título/subtítulo dentro de la tarjeta si quieres */}
+            {/* <div className="p-4">
+              <h3 className="font-semibold text-lg">{project.heading}</h3>
+              <p className="text-sm text-gray-500">{project.subHeading}</p>
+            </div> */}
           </div>
         ))}
       </div>
-
 
       {/* Modal */}
       {modalOpen && (
@@ -129,8 +136,6 @@ export default function ProjectsGrid({ projectImages }: ProjectsGridProps) {
                 &gt;
               </button>
             </div>
-
-
 
             {/* Botón cerrar */}
             <button
